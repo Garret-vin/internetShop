@@ -1,7 +1,9 @@
 package controller;
 
+import dao.DaoInterface;
 import dao.UserDao;
 import model.User;
+import service.UserDaoFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,6 +14,9 @@ import java.io.IOException;
 
 @WebServlet(value = "/register")
 public class RegisterServlet extends HttpServlet {
+
+    private DaoInterface<User> userDao = UserDaoFactory.getInstance();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -27,14 +32,15 @@ public class RegisterServlet extends HttpServlet {
         String confirmPassword = req.getParameter("confirm");
 
         if (password.equals(confirmPassword)) {
-            UserDao userDao = new UserDao();
-            User user = userDao.create(email, login, password);
+            User user = UserDao.create(email, login, password);
             userDao.add(user);
-            req.getRequestDispatcher("index.jsp").forward(req, resp);
+            resp.setStatus(HttpServletResponse.SC_OK);
+            req.getRequestDispatcher("users.jsp").forward(req, resp);
         } else {
             req.setAttribute("error", "Passwords not equals!");
+            req.setAttribute("defaultLogin", login);
+            req.setAttribute("defaultEmail", email);
             req.getRequestDispatcher("register.jsp").forward(req, resp);
-
         }
     }
 }

@@ -3,14 +3,18 @@ package dao;
 import model.User;
 import service.Database;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class UserDao implements DaoInterface<User> {
 
     private static Long id = 0L;
 
-    public User create(String email, String login, String password) {
-        if (email == null || login == null || password == null) {
+    public static User create(String email, String login, String password) {
+        if (Objects.isNull(email)
+                || Objects.isNull(login)
+                || Objects.isNull(password)) {
             throw new NoSuchElementException("Wrong arguments!");
         }
         id++;
@@ -20,5 +24,10 @@ public class UserDao implements DaoInterface<User> {
     @Override
     public void add(User item) {
         Database.users.add(item);
+    }
+
+    @Override
+    public List<User> getAll() {
+        return Database.users;
     }
 }

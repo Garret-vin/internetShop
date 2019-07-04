@@ -12,16 +12,17 @@
 </head>
 <body>
 
-<form action="/register" method="get">
-    Для регистрации нажмите кнопку
-    <button type="submit">Регистрация</button>
-</form>
+<div align="center">
+    <form action="/users" method="get">
+        Логин <input type="text"> <br>
+        Пароль <input type="password"> <br>
+        <input type="submit" value="Войти">
+    </form>
 
-<form action="/add" method="get">
-    Для добавления товара нажмите кнопку
-    <button type="submit">Добавить товар</button>
-</form>
-
+    <form action="/register" method="get">
+        <input type="submit" value="Регистрация">
+    </form>
+</div>
 
 </body>
 </html>
