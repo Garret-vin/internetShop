@@ -30,7 +30,9 @@ public class RegisterServlet extends HttpServlet {
             userDao.add(user);
             req.getRequestDispatcher("index.jsp").forward(req, resp);
         } else {
-            doGet(req, resp);
+            req.setAttribute("error", "Passwords not equals!");
+            req.getRequestDispatcher("register.jsp").forward(req, resp);
+
         }
     }
 }
