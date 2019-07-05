@@ -1,6 +1,7 @@
-package service;
+package factory;
 
 import dao.ProductDao;
+import dao.impl.ProductDaoImpl;
 
 public class ProductDaoFactory {
 
@@ -9,9 +10,9 @@ public class ProductDaoFactory {
     private ProductDaoFactory() {
     }
 
-    public static ProductDao getInstance() {
+    public static synchronized ProductDao getInstance() {
         if (instance == null) {
-            instance = new ProductDao();
+            instance = new ProductDaoImpl();
         }
         return instance;
     }

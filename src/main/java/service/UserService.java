@@ -1,10 +1,10 @@
-package dao;
+package service;
 
 import model.User;
 
 import java.util.List;
 
-public interface UserDao {
+public interface UserService {
 
     User create(String email, String login, String password);
 

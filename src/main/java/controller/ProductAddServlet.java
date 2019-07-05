@@ -1,9 +1,8 @@
 package controller;
 
-import dao.DaoInterface;
-import dao.ProductDao;
+import factory.ProductServiceFactory;
 import model.Product;
-import service.ProductDaoFactory;
+import service.ProductService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +14,7 @@ import java.io.IOException;
 @WebServlet(value = "/add")
 public class ProductAddServlet extends HttpServlet {
 
-    private DaoInterface<Product> productDao = ProductDaoFactory.getInstance();
+    private static final ProductService productService = ProductServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -30,9 +29,9 @@ public class ProductAddServlet extends HttpServlet {
         String description = req.getParameter("description");
         Double price = Double.parseDouble(req.getParameter("price"));
 
-        Product product = ProductDao.create(name, description, price);
+        Product product = productService.create(name, description, price);
 
-        productDao.add(product);
+        productService.add(product);
         resp.setStatus(HttpServletResponse.SC_OK);
         req.getRequestDispatcher("users.jsp").forward(req, resp);
     }

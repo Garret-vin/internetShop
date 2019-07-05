@@ -1,9 +1,8 @@
 package controller;
 
-import dao.DaoInterface;
-import dao.UserDao;
+import factory.UserServiceFactory;
 import model.User;
-import service.UserDaoFactory;
+import service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +14,7 @@ import java.io.IOException;
 @WebServlet(value = "/register")
 public class RegisterServlet extends HttpServlet {
 
-    private DaoInterface<User> userDao = UserDaoFactory.getInstance();
+    private static final UserService userService = UserServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -32,8 +31,8 @@ public class RegisterServlet extends HttpServlet {
         String confirmPassword = req.getParameter("confirm");
 
         if (password.equals(confirmPassword)) {
-            User user = UserDao.create(email, login, password);
-            userDao.add(user);
+            User user = userService.create(email, login, password);
+            userService.add(user);
             resp.setStatus(HttpServletResponse.SC_OK);
             req.getRequestDispatcher("users.jsp").forward(req, resp);
         } else {

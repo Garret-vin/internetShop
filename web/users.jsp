@@ -1,7 +1,7 @@
 <%@ page import="model.Product" %>
 <%@ page import="model.User" %>
-<%@ page import="service.ProductDaoFactory" %>
-<%@ page import="service.UserDaoFactory" %>
+<%@ page import="factory.ProductDaoFactory" %>
+<%@ page import="factory.UserDaoFactory" %>
 <%@ page import="java.io.PrintWriter" %>
 <%@ page import="java.util.List" %>
 <%--

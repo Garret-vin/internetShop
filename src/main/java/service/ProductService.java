@@ -1,10 +1,10 @@
-package dao;
+package service;
 
 import model.Product;
 
 import java.util.List;
 
-public interface ProductDao {
+public interface ProductService {
 
     Product create(String name, String description, Double price);
 
