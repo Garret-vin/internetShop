@@ -1,7 +1,6 @@
 package com.controller;
 
 import com.factory.ProductServiceFactory;
-import com.model.Product;
 import com.service.ProductService;
 
 import javax.servlet.ServletException;

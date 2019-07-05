@@ -1,13 +1,7 @@
-<%@ page import="factory.ProductServiceFactory" %>
-<%@ page import="model.Product" %>
+<%@ page import="com.factory.ProductServiceFactory" %>
+<%@ page import="com.model.Product" %>
 <%@ page import="java.io.PrintWriter" %>
-<%@ page import="java.util.List" %><%--
-  Created by IntelliJ IDEA.
-  User: Garret
-  Date: 05.07.2019
-  Time: 12:47
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="java.util.List" %>
 <%@page contentType="text/html;charset=utf-8" pageEncoding="UTF-8" %>
 <html>
 <head>

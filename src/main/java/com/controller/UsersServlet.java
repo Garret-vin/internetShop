@@ -1,8 +1,8 @@
-package controller;
+package com.controller;
 
-import factory.UserServiceFactory;
-import model.User;
-import service.UserService;
+import com.factory.UserServiceFactory;
+import com.model.User;
+import com.service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,7 +26,6 @@ public class UsersServlet extends HttpServlet {
         Map<String, String> userMap = getMapLoginToPassword();
         if (userMap.containsKey(login)
                 && userMap.get(login).equals(password)) {
-            
             req.getRequestDispatcher("users.jsp").forward(req, resp);
         } else {
             req.setAttribute("error", "Пользователь с таким логином и паролем не найден,\n" +

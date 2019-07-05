@@ -1,14 +1,7 @@
-<%@ page import="factory.UserDaoFactory" %>
-<%@ page import="model.User" %>
+<%@ page import="com.factory.UserDaoFactory" %>
+<%@ page import="com.model.User" %>
 <%@ page import="java.io.PrintWriter" %>
 <%@ page import="java.util.List" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Garret
-  Date: 04.07.2019
-  Time: 19:50
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -48,7 +41,6 @@
         <input type="submit" value="Товары">
     </form>
 
-    <br>
     <form action="index.jsp">
         <input type="submit" value="Выйти">
     </form>
