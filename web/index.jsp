@@ -13,6 +13,8 @@
 <body>
 
 <div align="center">
+
+    <div align="center">${error}</div>
     <form action="/users" method="get">
         Логин <input type="text" name="login"> <br>
         Пароль <input type="password" name="password"> <br>
