@@ -14,8 +14,8 @@
 
 <div align="center">
     <form action="/users" method="get">
-        Логин <input type="text"> <br>
-        Пароль <input type="password"> <br>
+        Логин <input type="text" name="login"> <br>
+        Пароль <input type="password" name="password"> <br>
         <input type="submit" value="Войти">
     </form>
 

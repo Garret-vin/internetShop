@@ -1,14 +1,14 @@
-<%@ page import="model.Product" %>
-<%@ page import="java.util.List" %>
 <%@ page import="factory.ProductServiceFactory" %>
-<%@ page import="java.io.PrintWriter" %><%--
+<%@ page import="model.Product" %>
+<%@ page import="java.io.PrintWriter" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: Garret
   Date: 05.07.2019
   Time: 12:47
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@page contentType="text/html;charset=utf-8" pageEncoding="UTF-8" %>
 <html>
 <head>
     <title>Products</title>
@@ -17,7 +17,6 @@
 <%
     List<Product> productList = ProductServiceFactory.getInstance().getAll();
     PrintWriter printWriter = response.getWriter();
-    printWriter.write("<br><br>");
     printWriter.write("<form action=\"/add\" method=\"get\">\n" +
             "    <button type=\"submit\">Добавить товар</button>\n" +
             "</form>");
@@ -41,7 +40,7 @@
 %>
 
 <br>
-<form action="/users" method="get">
+<form action="users.jsp">
     <input type="submit" value="Пользователи">
 </form>
 </body>

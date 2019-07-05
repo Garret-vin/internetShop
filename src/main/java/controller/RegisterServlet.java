@@ -30,7 +30,10 @@ public class RegisterServlet extends HttpServlet {
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirm");
 
-        if (password.equals(confirmPassword)) {
+        if (email.isEmpty() || login.isEmpty() || password.isEmpty()) {
+            req.setAttribute("error", "Empty fields!");
+            req.getRequestDispatcher("register.jsp").forward(req, resp);
+        } else if (password.equals(confirmPassword)) {
             User user = userService.create(email, login, password);
             userService.add(user);
             resp.setStatus(HttpServletResponse.SC_OK);

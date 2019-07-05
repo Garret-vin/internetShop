@@ -1,7 +1,5 @@
-<%@ page import="model.Product" %>
-<%@ page import="model.User" %>
-<%@ page import="factory.ProductDaoFactory" %>
 <%@ page import="factory.UserDaoFactory" %>
+<%@ page import="model.User" %>
 <%@ page import="java.io.PrintWriter" %>
 <%@ page import="java.util.List" %>
 <%--
@@ -46,13 +44,15 @@
     %>
 
     <br>
-    <form action="index.jsp">
-        <input type="submit" value="Вернуться на главную">
-    </form>
-
     <form action="/products" method="get">
         <input type="submit" value="Товары">
     </form>
+
+    <br>
+    <form action="index.jsp">
+        <input type="submit" value="Выйти">
+    </form>
+
 </div>
 </body>
 </html>
