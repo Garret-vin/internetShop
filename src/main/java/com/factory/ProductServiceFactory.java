@@ -1,7 +1,7 @@
-package factory;
+package com.factory;
 
-import service.ProductService;
-import service.impl.ProductServiceImpl;
+import com.service.ProductService;
+import com.service.impl.ProductServiceImpl;
 
 public class ProductServiceFactory {
 

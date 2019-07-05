@@ -1,7 +1,7 @@
-package factory;
+package com.factory;
 
-import service.UserService;
-import service.impl.UserServiceImpl;
+import com.service.UserService;
+import com.service.impl.UserServiceImpl;
 
 public class UserServiceFactory {
 

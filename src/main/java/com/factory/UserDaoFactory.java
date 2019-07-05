@@ -1,7 +1,7 @@
-package factory;
+package com.factory;
 
-import dao.UserDao;
-import dao.impl.UserDaoImpl;
+import com.dao.UserDao;
+import com.dao.impl.UserDaoImpl;
 
 public class UserDaoFactory {
 

@@ -1,7 +1,7 @@
-package utils;
+package com.utils;
 
-import model.Product;
-import model.User;
+import com.model.Product;
+import com.model.User;
 
 import java.util.ArrayList;
 import java.util.List;

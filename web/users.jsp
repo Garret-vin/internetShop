@@ -1,7 +1,7 @@
-<%@ page import="model.Product" %>
-<%@ page import="model.User" %>
-<%@ page import="factory.ProductDaoFactory" %>
-<%@ page import="factory.UserDaoFactory" %>
+<%@ page import="com.model.Product" %>
+<%@ page import="com.model.User" %>
+<%@ page import="com.factory.ProductDaoFactory" %>
+<%@ page import="com.factory.UserDaoFactory" %>
 <%@ page import="java.io.PrintWriter" %>
 <%@ page import="java.util.List" %>
 <%--
@@ -49,7 +49,7 @@
         List<Product> productList = ProductDaoFactory.getInstance().getAll();
 
         printWriter.write("<br><br>");
-        printWriter.write("<form action=\"/add\" method=\"get\">\n" +
+        printWriter.write("<form action=\"/addProduct\" method=\"get\">\n" +
                 "    <button type=\"submit\">Добавить товар</button>\n" +
                 "</form>");
 

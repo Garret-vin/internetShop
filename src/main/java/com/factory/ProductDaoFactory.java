@@ -1,7 +1,7 @@
-package factory;
+package com.factory;
 
-import dao.ProductDao;
-import dao.impl.ProductDaoImpl;
+import com.dao.ProductDao;
+import com.dao.impl.ProductDaoImpl;
 
 public class ProductDaoFactory {
 

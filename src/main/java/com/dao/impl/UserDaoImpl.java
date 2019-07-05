@@ -1,8 +1,8 @@
-package dao.impl;
+package com.dao.impl;
 
-import dao.UserDao;
-import model.User;
-import utils.Database;
+import com.dao.UserDao;
+import com.model.User;
+import com.utils.Database;
 
 import java.util.List;
 import java.util.NoSuchElementException;

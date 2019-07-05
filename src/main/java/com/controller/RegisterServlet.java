@@ -1,8 +1,8 @@
-package controller;
+package com.controller;
 
-import factory.UserServiceFactory;
-import model.User;
-import service.UserService;
+import com.factory.UserServiceFactory;
+import com.model.User;
+import com.service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,8 +31,7 @@ public class RegisterServlet extends HttpServlet {
         String confirmPassword = req.getParameter("confirm");
 
         if (password.equals(confirmPassword)) {
-            User user = userService.create(email, login, password);
-            userService.add(user);
+            userService.addUser(email, login, password);
             resp.setStatus(HttpServletResponse.SC_OK);
             req.getRequestDispatcher("users.jsp").forward(req, resp);
         } else {
