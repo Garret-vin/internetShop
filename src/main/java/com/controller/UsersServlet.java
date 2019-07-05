@@ -35,12 +35,6 @@ public class UsersServlet extends HttpServlet {
 
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        super.doPost(req, resp);
-    }
-
     private Map<String, String> getMapLoginToPassword() {
         return userService.getAll().stream()
                 .collect(Collectors.toMap(User::getLogin, User::getPassword));
