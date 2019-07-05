@@ -33,6 +33,6 @@ public class ProductAddServlet extends HttpServlet {
 
         productService.add(product);
         resp.setStatus(HttpServletResponse.SC_OK);
-        req.getRequestDispatcher("users.jsp").forward(req, resp);
+        req.getRequestDispatcher("products.jsp").forward(req, resp);
     }
 }
