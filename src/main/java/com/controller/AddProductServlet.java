@@ -31,6 +31,6 @@ public class AddProductServlet extends HttpServlet {
 
         productService.addProduct(name, description, price);
         resp.setStatus(HttpServletResponse.SC_OK);
-        req.getRequestDispatcher("users.jsp").forward(req, resp);
+        req.getRequestDispatcher("products.jsp").forward(req, resp);
     }
 }
