@@ -43,8 +43,9 @@ public class RegisterServlet extends HttpServlet {
             req.getRequestDispatcher("register.jsp").forward(req, resp);
         } else if (password.equals(confirmPassword)) {
             userService.addUser(email, login, password);
+            req.setAttribute("usersList", userService.getAll());
             resp.setStatus(HttpServletResponse.SC_OK);
-            resp.sendRedirect("users.jsp");
+            req.getRequestDispatcher("users.jsp").forward(req, resp);
         } else {
             req.setAttribute("error", "Passwords not equals!");
             req.setAttribute("enteredLogin", login);

@@ -54,6 +54,7 @@ public class ChangeUserServlet extends HttpServlet {
             user.setPassword(password);
             infoMessage += " was changed to " + user;
             logger.info(infoMessage);
+            req.setAttribute("usersList", userService.getAll());
             req.getRequestDispatcher("/users.jsp").forward(req, resp);
         }
     }

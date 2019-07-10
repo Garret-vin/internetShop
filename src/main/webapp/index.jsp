@@ -1,4 +1,4 @@
-<%@ page import="java.io.PrintWriter" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -8,16 +8,7 @@
 
 <div align="center">
 
-    <%
-        String error = (String) request.getAttribute("error");
-        PrintWriter printWriter = response.getWriter();
-
-        if (error != null) {
-            printWriter.write("<div align=\"center\">");
-            printWriter.write(error);
-            printWriter.write("</div>");
-        }
-    %>
+    ${error}
 
     <form action="/users" method="get">
         Логин <input type="text" name="login"> <br>

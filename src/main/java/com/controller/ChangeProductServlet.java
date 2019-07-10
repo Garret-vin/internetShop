@@ -1,6 +1,5 @@
 package com.controller;
 
-import com.dao.impl.ProductDaoImpl;
 import com.factory.ProductServiceFactory;
 import com.model.Product;
 import com.service.ProductService;
@@ -45,6 +44,7 @@ public class ChangeProductServlet extends HttpServlet {
         infoMessage += " was changed to " + product;
         logger.info(infoMessage);
 
+        req.setAttribute("productList", productService.getAll());
         resp.setStatus(HttpServletResponse.SC_OK);
         req.getRequestDispatcher("/products.jsp").forward(req, resp);
     }

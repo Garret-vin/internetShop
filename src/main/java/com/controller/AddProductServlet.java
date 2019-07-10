@@ -29,7 +29,8 @@ public class AddProductServlet extends HttpServlet {
         Double price = Double.parseDouble(req.getParameter("price"));
 
         productService.addProduct(name, description, price);
+        req.setAttribute("productList" , productService.getAll());
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.sendRedirect("products.jsp");
+        req.getRequestDispatcher("products.jsp").forward(req, resp);
     }
 }

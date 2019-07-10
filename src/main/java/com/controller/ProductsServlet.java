@@ -18,14 +18,16 @@ public class ProductsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        req.setAttribute("productList", productService.getAll());
         req.getRequestDispatcher("products.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
+            throws IOException, ServletException {
         Long id = Long.valueOf(req.getParameter("id"));
         productService.remove(productService.getMapIdToProduct().get(id));
-        resp.sendRedirect("/products");
+        req.setAttribute("productList", productService.getAll());
+        req.getRequestDispatcher("products.jsp").forward(req, resp);
     }
 }

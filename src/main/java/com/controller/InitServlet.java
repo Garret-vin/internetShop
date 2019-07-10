@@ -2,6 +2,7 @@ package com.controller;
 
 import com.factory.UserServiceFactory;
 import com.service.UserService;
+import com.utils.SessionUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,7 +19,8 @@ public class InitServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.getRequestDispatcher("/index.jsp").forward(req, resp);
+        SessionUtil.isAuthorized = false;
+        req.getRequestDispatcher("index.jsp").forward(req, resp);
     }
 
     @Override
