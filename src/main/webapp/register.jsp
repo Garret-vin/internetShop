@@ -17,19 +17,18 @@
 %>
 <div align="center">
     <form action="/register" method="post">
-        Login <input type="text" name="login" value="<%= (request.getAttribute("defaultLogin") == null) ? ""
-                      : request.getAttribute("defaultLogin")%>"> <br>
+        Login <input type="text" name="login" value="<%= (request.getAttribute("enteredLogin") == null) ? ""
+                      : request.getAttribute("enteredLogin")%>"> <br>
         E-mail <input type="email" name="email"
-                      value="<%= (request.getAttribute("defaultEmail") == null) ? ""
-                      : request.getAttribute("defaultEmail")%>"> <br>
+                      value="<%= (request.getAttribute("enteredEmail") == null) ? ""
+                      : request.getAttribute("enteredEmail")%>"> <br>
         Password <input type="password" name="password"> <br>
         Confirm password <input type="password" name="confirm"> <br>
         <input type="submit" value="Зарегистрироваться">
     </form>
 
-    <form action="index.jsp">
-        <input type="submit" value="Вернуться на главную">
-    </form>
+    <button><a href="index.jsp">Вернуться на главную</a></button>
+
 </div>
 </body>
 </html>

@@ -1,7 +1,6 @@
 package com.controller;
 
 import com.factory.UserServiceFactory;
-import com.model.User;
 import com.service.UserService;
 
 import javax.servlet.ServletException;
@@ -39,8 +38,8 @@ public class RegisterServlet extends HttpServlet {
             req.getRequestDispatcher("users.jsp").forward(req, resp);
         } else {
             req.setAttribute("error", "Passwords not equals!");
-            req.setAttribute("defaultLogin", login);
-            req.setAttribute("defaultEmail", email);
+            req.setAttribute("enteredLogin", login);
+            req.setAttribute("enteredEmail", email);
             req.getRequestDispatcher("register.jsp").forward(req, resp);
         }
     }

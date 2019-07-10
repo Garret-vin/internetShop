@@ -37,13 +37,8 @@
     %>
 
     <br>
-    <form action="/products" method="get">
-        <input type="submit" value="Товары">
-    </form>
-
-    <form action="index.jsp">
-        <input type="submit" value="Выйти">
-    </form>
+    <button><a href="products.jsp">Товары</a></button>
+    <button><a href="index.jsp">Вернуться на главную</a></button>
 
 </div>
 </body>

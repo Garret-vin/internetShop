@@ -11,9 +11,8 @@
     Цена <input type="number" step="0.01" min="0" placeholder="0,00" name="price"> <br>
     <input type="submit" value="Добавить товар"></form>
 </form>
-<form action="products.jsp">
-    <input type="submit" value="Вернуться">
-</form>
+
+<button><a href="products.jsp">Вернуться</a></button>
 
 </body>
 </html>

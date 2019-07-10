@@ -6,6 +6,8 @@ import com.model.User;
 import com.service.UserService;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.function.Supplier;
 
 public class UserServiceImpl implements UserService {
 
@@ -20,5 +22,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAll() {
         return userDao.getAll();
+    }
+
+    @Override
+    public User getByLogin(String login) {
+            return getAll().stream()
+                    .filter(user -> login.equals(user.getLogin()))
+                    .findAny()
+                    .get();
     }
 }

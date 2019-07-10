@@ -3,14 +3,13 @@ package com.dao.impl;
 import com.dao.UserDao;
 import com.model.User;
 import com.utils.Database;
+import com.utils.IdGeneratorUtil;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class UserDaoImpl implements UserDao {
-
-    private static Long id = 0L;
 
     @Override
     public User create(String email, String login, String password) {
@@ -19,8 +18,7 @@ public class UserDaoImpl implements UserDao {
                 || Objects.isNull(password)) {
             throw new NoSuchElementException("Wrong arguments!");
         }
-        id++;
-        return new User(id, email, login, password);
+        return new User(IdGeneratorUtil.getUserId(), email, login, password);
     }
 
     @Override

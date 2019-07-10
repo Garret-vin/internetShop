@@ -25,10 +25,7 @@
         <input type="submit" value="Войти">
     </form>
 
-    <form action="/register" method="get">
-        <input type="submit" value="Регистрация">
-    </form>
+    <button><a href="register.jsp">Регистрация</a></button>
 </div>
-
 </body>
 </html>

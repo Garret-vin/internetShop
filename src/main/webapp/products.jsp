@@ -34,8 +34,7 @@
 %>
 
 <br>
-<form action="users.jsp">
-    <input type="submit" value="Пользователи">
-</form>
+<button><a href="users.jsp">Пользователи</a></button>
+
 </body>
 </html>
