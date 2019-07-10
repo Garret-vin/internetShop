@@ -1,8 +1,10 @@
 package com.controller;
 
+import com.dao.impl.ProductDaoImpl;
 import com.factory.ProductServiceFactory;
 import com.model.Product;
 import com.service.ProductService;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +17,7 @@ import java.io.IOException;
 public class ChangeProductServlet extends HttpServlet {
 
     private static final ProductService productService = ProductServiceFactory.getInstance();
+    private static final Logger logger = Logger.getLogger(ChangeProductServlet.class);
     Product product;
 
     @Override
@@ -35,9 +38,13 @@ public class ChangeProductServlet extends HttpServlet {
         String description = req.getParameter("description");
         Double price = Double.parseDouble(req.getParameter("price"));
 
+        String infoMessage = product.toString();
         product.setName(name);
         product.setDescription(description);
         product.setPrice(price);
+        infoMessage += " was changed to " + product;
+        logger.info(infoMessage);
+
         resp.setStatus(HttpServletResponse.SC_OK);
         req.getRequestDispatcher("/products.jsp").forward(req, resp);
     }
