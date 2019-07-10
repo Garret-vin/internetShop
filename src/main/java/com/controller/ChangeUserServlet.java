@@ -1,6 +1,7 @@
 package com.controller;
 
 import com.factory.UserServiceFactory;
+import com.model.User;
 import com.service.UserService;
 
 import javax.servlet.ServletException;
@@ -9,17 +10,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
 
-@WebServlet("/register")
-public class RegisterServlet extends HttpServlet {
+@WebServlet("/change/user")
+public class ChangeUserServlet extends HttpServlet {
 
     private static final UserService userService = UserServiceFactory.getInstance();
+    private User user;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.getRequestDispatcher("register.jsp").forward(req, resp);
+        Long id = Long.valueOf(req.getParameter("id"));
+        user = userService.getById(id);
+        req.setAttribute("enteredLogin", user.getLogin());
+        req.setAttribute("enteredEmail", user.getEmail());
+        req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
     }
 
     @Override
@@ -29,27 +34,22 @@ public class RegisterServlet extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirm");
-        Map<String, String> loginToEmailMap = userService.getMapLoginToEmail();
 
         if (email.isEmpty() || login.isEmpty() || password.isEmpty()) {
             req.setAttribute("error", "Empty fields!");
             req.setAttribute("enteredLogin", login);
             req.setAttribute("enteredEmail", email);
-            req.getRequestDispatcher("register.jsp").forward(req, resp);
-        } else if (loginToEmailMap.containsKey(login)
-                || loginToEmailMap.containsValue(email)) {
-            req.setAttribute("error", "Пользователь с таким логином или " +
-                    "электронной почтой уже зарегистрирован!");
-            req.getRequestDispatcher("register.jsp").forward(req, resp);
+            req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
         } else if (password.equals(confirmPassword)) {
-            userService.addUser(email, login, password);
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.sendRedirect("users.jsp");
+            user.setLogin(login);
+            user.setEmail(email);
+            user.setPassword(password);
+            req.getRequestDispatcher("/users.jsp").forward(req, resp);
         } else {
             req.setAttribute("error", "Passwords not equals!");
             req.setAttribute("enteredLogin", login);
             req.setAttribute("enteredEmail", email);
-            req.getRequestDispatcher("register.jsp").forward(req, resp);
+            req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
         }
     }
 }

@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @WebServlet("/users")
 public class UsersServlet extends HttpServlet {
@@ -23,20 +21,21 @@ public class UsersServlet extends HttpServlet {
             throws ServletException, IOException {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
-        Map<String, String> userMap = getMapLoginToPassword();
-        if (userMap.containsKey(login)
-                && userMap.get(login).equals(password)) {
+        User registeredUser = userService.getByLogin(login);
+        if ((registeredUser != null) && (registeredUser.getPassword().equals(password))) {
             req.getRequestDispatcher("users.jsp").forward(req, resp);
         } else {
             req.setAttribute("error", "Пользователь с таким логином и паролем не найден,\n" +
                     " пожалуйста сначала зарегистрируйтесь!");
             req.getRequestDispatcher("index.jsp").forward(req, resp);
         }
-
     }
 
-    private Map<String, String> getMapLoginToPassword() {
-        return userService.getAll().stream()
-                .collect(Collectors.toMap(User::getLogin, User::getPassword));
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
+        Long id = Long.valueOf(req.getParameter("id"));
+        userService.removeUser(userService.getById(id));
+        resp.sendRedirect("/users.jsp");
     }
 }

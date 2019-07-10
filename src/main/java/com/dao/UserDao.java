@@ -8,7 +8,13 @@ public interface UserDao {
 
     User create(String email, String login, String password);
 
-    void add(User item);
+    void add(String email, String login, String password);
+
+    void remove(Long id);
+
+    User getById(Long id);
+
+    User getByLogin(String login);
 
     List<User> getAll();
 }

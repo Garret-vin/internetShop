@@ -1,7 +1,8 @@
-<%@ page import="com.factory.UserDaoFactory" %>
+<%@ page import="com.factory.UserServiceFactory" %>
 <%@ page import="com.model.User" %>
 <%@ page import="java.io.PrintWriter" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Collection" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -9,14 +10,13 @@
 </head>
 <body>
 
+
 <div align="left">
     <%
-        List<User> userList = UserDaoFactory.getInstance().getAll();
+        List<User> userList = UserServiceFactory.getInstance().getAll();
         PrintWriter printWriter = response.getWriter();
 
-        printWriter.write("<form action=\"/register\" method=\"get\">\n" +
-                "<input type=\"submit\" value=\"Добавить пользователя\">\n" +
-                "</form>");
+        printWriter.write("<button><a href=\"/register\">Добавить пользователя</a></button>");
 
         printWriter.write("<table border=\"1\">");
         printWriter.write("<tr>");
@@ -30,20 +30,22 @@
                 printWriter.write("<td>" + user.getEmail() + "</td>");
                 printWriter.write("<td>" + user.getLogin() + "</td>");
                 printWriter.write("<td>" + user.getPassword() + "</td>");
+                printWriter.write("<td>" +
+                        "<a href = \"/change/user?id=" + user.getId() + "\"> Изменить</a></td>");
+                printWriter.write("<td><form action=\"/users?id=" + user.getId() + "\" method=\"post\">" +
+                        "<input type=\"submit\" value=\"Удалить\">" +
+                        "</form>" +
+                        "</td>");
                 printWriter.write("</tr>");
+
             }
         }
         printWriter.write("</table>");
     %>
 
     <br>
-    <form action="/products" method="get">
-        <input type="submit" value="Товары">
-    </form>
-
-    <form action="index.jsp">
-        <input type="submit" value="Выйти">
-    </form>
+    <button><a href="products">Товары</a></button>
+    <button><a href="index.jsp">Выйти</a></button>
 
 </div>
 </body>

@@ -14,7 +14,6 @@
     printWriter.write("<form action=\"/add\" method=\"get\">\n" +
             "    <button type=\"submit\">Добавить товар</button>\n" +
             "</form>");
-
     printWriter.write("<table border=\"1\">");
     printWriter.write("<tr>");
     printWriter.write("<th>Наименование</th>");
@@ -27,6 +26,11 @@
             printWriter.write("<td>" + product.getName() + "</td>");
             printWriter.write("<td>" + product.getDescription() + "</td>");
             printWriter.write("<td>" + product.getPrice() + "</td>");
+            printWriter.write("<td>" +
+                    "<a href = \"/change/product?id=" + product.getId() + "\"> Изменить</a></td>");
+            printWriter.write("<td><form action=\"/products?id=" + product.getId() + "\" method=\"post\">" +
+                    "<input type=\"submit\" value=\"Удалить\">" +
+                    "</form></td>");
             printWriter.write("</tr>");
         }
     }
@@ -34,8 +38,8 @@
 %>
 
 <br>
-<form action="users.jsp">
-    <input type="submit" value="Пользователи">
-</form>
+
+<button><a href="users.jsp">Пользователи</a></button>
+
 </body>
 </html>

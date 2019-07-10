@@ -8,7 +8,9 @@ public interface ProductDao {
 
     Product create(String name, String description, Double price);
 
-    void add(Product item);
+    void add(Product product);
+
+    void remove(Product product);
 
     List<Product> getAll();
 }

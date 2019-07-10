@@ -1,6 +1,7 @@
 package com.controller;
 
 import com.factory.ProductServiceFactory;
+import com.model.Product;
 import com.service.ProductService;
 
 import javax.servlet.ServletException;
@@ -10,15 +11,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/add")
-public class AddProductServlet extends HttpServlet {
+@WebServlet("/change/product")
+public class ChangeProductServlet extends HttpServlet {
 
     private static final ProductService productService = ProductServiceFactory.getInstance();
+    Product product;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.getRequestDispatcher("addProduct.jsp").forward(req, resp);
+        Long id = Long.valueOf(req.getParameter("id"));
+        product = productService.getById(id);
+        req.setAttribute("oldName", product.getName());
+        req.setAttribute("oldDescription", product.getDescription());
+        req.setAttribute("oldPrice", product.getPrice());
+        req.getRequestDispatcher("/change_product.jsp").forward(req, resp);
     }
 
     @Override
@@ -28,8 +35,10 @@ public class AddProductServlet extends HttpServlet {
         String description = req.getParameter("description");
         Double price = Double.parseDouble(req.getParameter("price"));
 
-        productService.addProduct(name, description, price);
+        product.setName(name);
+        product.setDescription(description);
+        product.setPrice(price);
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.sendRedirect("products.jsp");
+        req.getRequestDispatcher("/products.jsp").forward(req, resp);
     }
 }
