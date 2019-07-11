@@ -32,8 +32,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void remove(Long id) {
-        User user = getById(id);
+    public void remove(User user) {
         boolean result = Database.users.remove(user);
         logger.info(user + " removing result -> " + result);
     }

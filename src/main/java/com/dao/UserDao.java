@@ -10,7 +10,7 @@ public interface UserDao {
 
     void add(String email, String login, String password);
 
-    void remove(Long id);
+    void remove(User user);
 
     User getById(Long id);
 
