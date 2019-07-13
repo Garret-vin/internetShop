@@ -31,9 +31,10 @@ public class AddUserServlet extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirm");
+        String role = req.getParameter("role");
         Map<String, String> loginToEmailMap = userService.getMapLoginToEmail();
 
-        if (email.isEmpty() || login.isEmpty() || password.isEmpty()) {
+        if (email.isEmpty() || login.isEmpty() || password.isEmpty() || role == null) {
             req.setAttribute("error", "Empty fields!");
             req.setAttribute("enteredLogin", login);
             req.setAttribute("enteredEmail", email);
@@ -44,7 +45,7 @@ public class AddUserServlet extends HttpServlet {
                     "электронной почтой уже зарегистрирован!");
             req.getRequestDispatcher("/addUser.jsp").forward(req, resp);
         } else if (password.equals(confirmPassword)) {
-            User user = new User(email, login, password, "user");
+            User user = new User(email, login, password, role);
             userService.add(user);
             resp.sendRedirect("/admin/users");
         } else {
