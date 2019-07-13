@@ -64,10 +64,7 @@ public class ChangeProductServlet extends HttpServlet {
                 product.setPrice(price);
                 infoMessage += " was changed to " + product;
                 logger.info(infoMessage);
-
-                req.setAttribute("productList", productService.getAll());
-                resp.setStatus(HttpServletResponse.SC_OK);
-                req.getRequestDispatcher("/products.jsp").forward(req, resp);
+                resp.sendRedirect("/products");
             }
         }
     }

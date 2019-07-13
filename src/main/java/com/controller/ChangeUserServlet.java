@@ -19,7 +19,6 @@ public class ChangeUserServlet extends HttpServlet {
     private static final UserService userService = UserServiceFactory.getInstance();
     private static final Logger logger = Logger.getLogger(ChangeUserServlet.class);
 
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -71,7 +70,6 @@ public class ChangeUserServlet extends HttpServlet {
                 user.setPassword(password);
                 infoMessage += " was changed to " + user;
                 logger.info(infoMessage);
-                req.setAttribute("usersList", userService.getAll());
                 resp.sendRedirect("/admin/users");
             }
         }
