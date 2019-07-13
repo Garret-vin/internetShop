@@ -3,58 +3,47 @@ package com.dao.impl;
 import com.dao.UserDao;
 import com.model.User;
 import com.utils.Database;
-import com.utils.IdGeneratorUtil;
 import org.apache.log4j.Logger;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.Optional;
 
 public class UserDaoImpl implements UserDao {
 
     private static final Logger logger = Logger.getLogger(UserDaoImpl.class);
 
     @Override
-    public User create(String email, String login, String password) {
-        if (Objects.isNull(email)
-                || Objects.isNull(login)
-                || Objects.isNull(password)) {
-            throw new NoSuchElementException("Wrong arguments!");
-        }
-        return new User(IdGeneratorUtil.getUserId(), email, login, password);
-    }
-
-    @Override
-    public void add(String email, String login, String password) {
-        User user = create(email, login, password);
+    public void add(User user) {
         Database.users.add(user);
         logger.info("User " + user + " was added in system.");
     }
 
     @Override
-    public void remove(User user) {
-        boolean result = Database.users.remove(user);
-        logger.info(user + " removing result -> " + result);
+    public void remove(Long id) {
+        Optional<User> optionalUser = getById(id);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            Database.users.remove(user);
+            logger.info(user + " was deleted from database");
+        } else {
+            logger.warn("Can't delete user. Reason: user not found!");
+        }
     }
 
     @Override
-    public User getById(Long id) {
-        for (User user : Database.users) {
-            if (id.equals(user.getId())) {
-                return user;
-            }
-        }
-        return null;
+    public Optional<User> getById(Long id) {
+        List<User> allUsers = getAll();
+        return allUsers.stream()
+                .filter(user -> user.getId().equals(id))
+                .findFirst();
     }
 
     @Override
-    public User getByLogin(String login) {
-        for (User user : Database.users) {
-            if (login.equals(user.getLogin())) {
-                return user;
-            }
-        }
-        return null;
+    public Optional<User> getByLogin(String login) {
+        List<User> allUsers = getAll();
+        return allUsers.stream()
+                .filter(user -> user.getLogin().equals(login))
+                .findFirst();
     }
 
     @Override

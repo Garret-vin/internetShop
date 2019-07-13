@@ -6,10 +6,8 @@
 </head>
 <body>
 
-<form action="/add" method="get">
-    <button type="submit">Добавить товар</button>
-</form>
-
+<button><a href="/add/product">Добавить товар</a></button>
+<br>
 <table border="1">
 
     <tr>
@@ -24,17 +22,14 @@
             <td>${product.price}</td>
             <td><a href="/change/product?id=${product.id}">Изменить</a></td>
             <td>
-                <form action="/products?id=${product.id}" method="post">
-                    <input type="submit" value="Удалить">
-                </form>
+                <button><a href="/delete/product?id=${product.id}">Удалить</a></button>
             </td>
         </tr>
     </c:forEach>
 
 </table>
-
 <br>
-<button><a href="users">Пользователи</a></button>
+<button><a href="/admin/users">${role.equals("admin") ? "Пользователи" : "Выйти"}</a></button>
 
 </body>
 </html>

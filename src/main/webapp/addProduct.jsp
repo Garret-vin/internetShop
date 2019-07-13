@@ -6,14 +6,14 @@
 </head>
 <body>
 
-<form action="/add" method="post">
+<form action="/add/product" method="post">
     Название <input type="text" name="name"> <br>
     Описание <input type="text" name="description"> <br>
     Цена <input type="number" step="0.01" min="0" placeholder="0,00" name="price"> <br>
     <input type="submit" value="Добавить товар"></form>
 </form>
 
-<button><a href="products">Вернуться</a></button>
+<button><a href="/products">Вернуться</a></button>
 
 </body>
 </html>

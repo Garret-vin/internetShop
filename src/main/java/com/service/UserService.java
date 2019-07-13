@@ -4,18 +4,19 @@ import com.model.User;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface UserService {
 
-    void addUser(String email, String login, String password);
+    void add(User user);
 
-    void removeUser(User user);
+    void remove(Long id);
 
     Map<String, String> getMapLoginToEmail();
 
-    User getByLogin(String login);
+    Optional<User> getByLogin(String login);
 
     List<User> getAll();
 
-    User getById(Long id);
+    Optional<User> getById(Long id);
 }

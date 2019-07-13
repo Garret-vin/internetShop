@@ -10,15 +10,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/admin/users")
-public class UsersServlet extends HttpServlet {
+@WebServlet("/delete/user")
+public class DeleteUserServlet extends HttpServlet {
 
     private static final UserService userService = UserServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.setAttribute("usersList", userService.getAll());
-        req.getRequestDispatcher("/users.jsp").forward(req, resp);
+        Long id = Long.valueOf(req.getParameter("id"));
+        userService.remove(id);
+        resp.sendRedirect("/admin/users");
     }
 }

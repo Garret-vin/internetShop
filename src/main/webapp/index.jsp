@@ -10,13 +10,13 @@
 
     ${error}
 
-    <form action="/users" method="get">
+    <form action="/login" method="post">
         Логин <input type="text" name="login"> <br>
-        Пароль <input type="password" name="password"> <br>
+        Пароль <input type="password" name="password">
+        <br><br>
         <input type="submit" value="Войти">
     </form>
 
-    <button><a href="/register">Зарегистрироваться</a></button>
 </div>
 
 </body>

@@ -6,15 +6,15 @@
 </head>
 <body>
 
-<form action="/change/product" method="post">
+${error}
+
+<form action="/change/product?id=${productId}" method="post">
     Название <input type="text" name="name" value="${oldName}"> <br>
     Описание <input type="text" name="description" value="${oldDescription}"> <br>
     Цена <input type="number" step="0.01" min="0" placeholder="0,00" name="price" value="${oldPrice}">
     <br>
     <input type="submit" value="Изменить товар"></form>
 </form>
-
-<button><a href="/products">Вернуться</a></button>
 
 </body>
 </html>

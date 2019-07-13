@@ -1,6 +1,7 @@
 package com.controller;
 
 import com.factory.UserServiceFactory;
+import com.model.User;
 import com.service.UserService;
 
 import javax.servlet.ServletException;
@@ -11,20 +12,21 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
-@WebServlet("/register")
-public class RegisterServlet extends HttpServlet {
+@WebServlet("/add/user")
+public class AddUserServlet extends HttpServlet {
 
     private static final UserService userService = UserServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.getRequestDispatcher("register.jsp").forward(req, resp);
+        req.getRequestDispatcher("/addUser.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         String email = req.getParameter("email");
         String login = req.getParameter("login");
         String password = req.getParameter("password");
@@ -35,22 +37,21 @@ public class RegisterServlet extends HttpServlet {
             req.setAttribute("error", "Empty fields!");
             req.setAttribute("enteredLogin", login);
             req.setAttribute("enteredEmail", email);
-            req.getRequestDispatcher("register.jsp").forward(req, resp);
+            req.getRequestDispatcher("/addUser.jsp").forward(req, resp);
         } else if (loginToEmailMap.containsKey(login)
                 || loginToEmailMap.containsValue(email)) {
             req.setAttribute("error", "Пользователь с таким логином или " +
                     "электронной почтой уже зарегистрирован!");
-            req.getRequestDispatcher("register.jsp").forward(req, resp);
+            req.getRequestDispatcher("/addUser.jsp").forward(req, resp);
         } else if (password.equals(confirmPassword)) {
-            userService.addUser(email, login, password);
-            req.setAttribute("usersList", userService.getAll());
-            resp.setStatus(HttpServletResponse.SC_OK);
-            req.getRequestDispatcher("users.jsp").forward(req, resp);
+            User user = new User(email, login, password, "user");
+            userService.add(user);
+            resp.sendRedirect("/admin/users");
         } else {
             req.setAttribute("error", "Passwords not equals!");
             req.setAttribute("enteredLogin", login);
             req.setAttribute("enteredEmail", email);
-            req.getRequestDispatcher("register.jsp").forward(req, resp);
+            req.getRequestDispatcher("/addUser.jsp").forward(req, resp);
         }
     }
 }

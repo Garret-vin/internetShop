@@ -3,18 +3,17 @@ package com.dao;
 import com.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserDao {
 
-    User create(String email, String login, String password);
+    void add(User user);
 
-    void add(String email, String login, String password);
+    void remove(Long id);
 
-    void remove(User user);
+    Optional<User> getById(Long id);
 
-    User getById(Long id);
-
-    User getByLogin(String login);
+    Optional<User> getByLogin(String login);
 
     List<User> getAll();
 }

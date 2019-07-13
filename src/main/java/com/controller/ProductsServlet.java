@@ -1,6 +1,7 @@
 package com.controller;
 
 import com.factory.ProductServiceFactory;
+import com.model.User;
 import com.service.ProductService;
 
 import javax.servlet.ServletException;
@@ -18,16 +19,9 @@ public class ProductsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        User userFromSession = (User) req.getSession().getAttribute("user");
+        req.setAttribute("role", userFromSession.getRole());
         req.setAttribute("productList", productService.getAll());
-        req.getRequestDispatcher("products.jsp").forward(req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException, ServletException {
-        Long id = Long.valueOf(req.getParameter("id"));
-        productService.remove(productService.getMapIdToProduct().get(id));
-        req.setAttribute("productList", productService.getAll());
-        req.getRequestDispatcher("products.jsp").forward(req, resp);
+        req.getRequestDispatcher("/products.jsp").forward(req, resp);
     }
 }

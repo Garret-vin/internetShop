@@ -1,17 +1,33 @@
 package com.model;
 
+import com.utils.IdGeneratorUtil;
+
 public class User {
 
     private Long id;
     private String email;
     private String login;
     private String password;
+    private String role;
 
-    public User(Long id, String email, String login, String password) {
-        this.id = id;
+    public User(String email, String login, String password, String role) {
+        this.id = IdGeneratorUtil.getUserId();
         this.email = email;
         this.login = login;
         this.password = password;
+        this.role = role;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getEmail() {

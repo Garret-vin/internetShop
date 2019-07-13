@@ -9,7 +9,7 @@
 
 <div align="left">
 
-    <button><a href="/register">Добавить пользователя</a></button>
+    <button><a href="/add/user">Добавить пользователя</a></button>
 
     <table border="1">
         <tr>
@@ -22,11 +22,11 @@
                 <td>${user.email}</td>
                 <td>${user.login}</td>
                 <td>${user.password}</td>
-                <td><a href="/change/user?id=${user.id}">Изменить</a></td>
                 <td>
-                    <form action="/users?id=${user.id}" method="post">
-                        <input type="submit" value="Удалить">
-                    </form>
+                    <button><a href="/change/user?id=${user.id}">Изменить</a></button>
+                </td>
+                <td>
+                    <button><a href="/delete/user?id=${user.id}">Удалить</a></button>
                 </td>
             </tr>
         </c:forEach>
@@ -34,7 +34,7 @@
 
     <br>
     <button><a href="/products">Товары</a></button>
-    <button><a href="index">Выйти</a></button>
+    <button><a href="/">Выйти</a></button>
 
 </div>
 </body>

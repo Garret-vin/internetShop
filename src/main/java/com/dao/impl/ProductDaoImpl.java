@@ -3,27 +3,14 @@ package com.dao.impl;
 import com.dao.ProductDao;
 import com.model.Product;
 import com.utils.Database;
-import com.utils.IdGeneratorUtil;
 import org.apache.log4j.Logger;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.Optional;
 
 public class ProductDaoImpl implements ProductDao {
 
     private static final Logger logger = Logger.getLogger(ProductDaoImpl.class);
-
-    @Override
-    public Product create(String name, String description, Double price) {
-        if (Objects.isNull(name)
-                || Objects.isNull(description)
-                || Objects.isNull(price)) {
-            throw new NoSuchElementException("Wrong arguments!");
-        } else {
-            return new Product(IdGeneratorUtil.getProductId(), name, description, price);
-        }
-    }
 
     @Override
     public void add(Product product) {
@@ -32,13 +19,27 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public void remove(Product product) {
-        boolean result = Database.products.remove(product);
-        logger.info("Remove of " + product + " = " + result);
+    public void remove(Long id) {
+        Optional<Product> optionalProduct = getById(id);
+        if (optionalProduct.isPresent()) {
+            Product product = optionalProduct.get();
+            Database.products.remove(product);
+            logger.info(product + " was deleted from database");
+        } else {
+            logger.warn("Can't delete product. Reason: product not found!");
+        }
     }
 
     @Override
     public List<Product> getAll() {
         return Database.products;
+    }
+
+    @Override
+    public Optional<Product> getById(Long id) {
+        List<Product> allProducts = getAll();
+        return allProducts.stream()
+                .filter(product -> product.getId().equals(id))
+                .findFirst();
     }
 }

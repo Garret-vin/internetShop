@@ -3,14 +3,15 @@ package com.dao;
 import com.model.Product;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductDao {
 
-    Product create(String name, String description, Double price);
-
     void add(Product product);
 
-    void remove(Product product);
+    void remove(Long id);
 
     List<Product> getAll();
+
+    Optional<Product> getById(Long id);
 }

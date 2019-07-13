@@ -8,15 +8,15 @@
 
 ${error}
 
-<form action="/change/user" method="post">
+<form action="/change/user?id=${userId}" method="post">
     Login <input type="text" name="login" value="${enteredLogin}"> <br>
-    E-mail <input type="email" name="email" value="${enteredLogin}"> <br>
-    Password <input type="password" name="password"> <br>
-    Confirm password <input type="password" name="confirm"> <br>
+    E-mail <input type="email" name="email" value="${enteredEmail}"> <br>
+    Password <input type="password" name="password" value="${enteredPassword}"> <br>
+    Confirm password <input type="password" name="confirm" value="${enteredConfirm}"> <br>
     <input type="submit" value="Подтвердить">
 </form>
 
-<button><a href="/users">Вернуться</a></button>
+<button><a href="/admin/users">Вернуться</a></button>
 
 </body>
 </html>

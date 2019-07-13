@@ -4,30 +4,24 @@ import com.dao.UserDao;
 import com.factory.UserDaoFactory;
 import com.model.User;
 import com.service.UserService;
-import org.apache.log4j.Logger;
 
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class UserServiceImpl implements UserService {
 
     private static final UserDao userDao = UserDaoFactory.getInstance();
-    private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
 
     @Override
-    public void addUser(String email, String login, String password) {
-        try {
-            userDao.add(email, login, password);
-        } catch (NoSuchElementException e) {
-            logger.warn("User can't be added, field is null", e);
-        }
+    public void add(User user) {
+        userDao.add(user);
     }
 
     @Override
-    public void removeUser(User user) {
-        userDao.remove(user);
+    public void remove(Long id) {
+        userDao.remove(id);
     }
 
     @Override
@@ -38,7 +32,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getByLogin(String login) {
+    public Optional<User> getByLogin(String login) {
         return userDao.getByLogin(login);
     }
 
@@ -48,7 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getById(Long id) {
+    public Optional<User> getById(Long id) {
         return userDao.getById(id);
     }
 }

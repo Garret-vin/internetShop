@@ -11,51 +11,69 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 @WebServlet("/change/user")
 public class ChangeUserServlet extends HttpServlet {
 
     private static final UserService userService = UserServiceFactory.getInstance();
     private static final Logger logger = Logger.getLogger(ChangeUserServlet.class);
-    private User user;
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         Long id = Long.valueOf(req.getParameter("id"));
-        user = userService.getById(id);
-        req.setAttribute("enteredLogin", user.getLogin());
-        req.setAttribute("enteredEmail", user.getEmail());
-        req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
+        Optional<User> optionalUser = userService.getById(id);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            req.setAttribute("userId", id);
+            req.setAttribute("enteredLogin", user.getLogin());
+            req.setAttribute("enteredEmail", user.getEmail());
+            req.setAttribute("enteredPassword", user.getPassword());
+            req.setAttribute("enteredConfirm", user.getPassword());
+            req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
+        } else {
+            logger.warn("Error: Can't edit user. Reason: user not found!");
+            resp.sendRedirect("/admin/users");
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         String email = req.getParameter("email");
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirm");
 
-        if (email.isEmpty() || login.isEmpty() || password.isEmpty()) {
-            req.setAttribute("error", "Empty fields!");
-            req.setAttribute("enteredLogin", login);
-            req.setAttribute("enteredEmail", email);
-            req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
-        } else if (!(password.equals(confirmPassword))) {
-            req.setAttribute("error", "Passwords not equals!");
-            req.setAttribute("enteredLogin", login);
-            req.setAttribute("enteredEmail", email);
-            req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
-        } else {
-            String infoMessage = user.toString();
-            user.setLogin(login);
-            user.setEmail(email);
-            user.setPassword(password);
-            infoMessage += " was changed to " + user;
-            logger.info(infoMessage);
-            req.setAttribute("usersList", userService.getAll());
-            req.getRequestDispatcher("/users.jsp").forward(req, resp);
+        Long id = Long.valueOf(req.getParameter("id"));
+        User user;
+        Optional<User> optionalUser = userService.getById(id);
+        if (optionalUser.isPresent()) {
+            user = optionalUser.get();
+            if (email.isEmpty() || login.isEmpty() || password.isEmpty()) {
+                req.setAttribute("error", "Empty fields!");
+                req.setAttribute("enteredLogin", login);
+                req.setAttribute("enteredEmail", email);
+                req.setAttribute("enteredPassword", password);
+                req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
+            } else if (!(password.equals(confirmPassword))) {
+                req.setAttribute("error", "Passwords not equals!");
+                req.setAttribute("enteredLogin", login);
+                req.setAttribute("enteredEmail", email);
+                req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
+            } else {
+                String infoMessage = user.toString();
+                user.setLogin(login);
+                user.setEmail(email);
+                user.setPassword(password);
+                infoMessage += " was changed to " + user;
+                logger.info(infoMessage);
+                req.setAttribute("usersList", userService.getAll());
+                resp.sendRedirect("/admin/users");
+            }
         }
     }
 }

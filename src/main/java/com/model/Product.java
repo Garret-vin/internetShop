@@ -1,5 +1,7 @@
 package com.model;
 
+import com.utils.IdGeneratorUtil;
+
 public class Product {
 
     private Long id;
@@ -7,8 +9,8 @@ public class Product {
     private String description;
     private Double price;
 
-    public Product(Long id, String name, String description, Double price) {
-        this.id = id;
+    public Product(String name, String description, Double price) {
+        this.id = IdGeneratorUtil.getProductId();
         this.name = name;
         this.description = description;
         this.price = price;
