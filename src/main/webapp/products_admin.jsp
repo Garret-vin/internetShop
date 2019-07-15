@@ -29,7 +29,7 @@
 
 </table>
 <br>
-<button><a href="/admin/users">${role.equals("admin") ? "Пользователи" : "Выйти"}</a></button>
+<button><a href="/admin/users">Пользователи</a></button>
 
 </body>
 </html>

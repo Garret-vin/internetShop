@@ -38,6 +38,6 @@ public class AddProductServlet extends HttpServlet {
         productService.addProduct(product);
 
         req.setAttribute("productList", productService.getAll());
-        req.getRequestDispatcher("/products.jsp").forward(req, resp);
+        req.getRequestDispatcher("/products_admin.jsp").forward(req, resp);
     }
 }

@@ -11,17 +11,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/products")
-public class ProductsServlet extends HttpServlet {
+@WebServlet("/user/products")
+public class UserProductsServlet extends HttpServlet {
 
     private static final ProductService productService = ProductServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        User userFromSession = (User) req.getSession().getAttribute("user");
-        req.setAttribute("role", userFromSession.getRole());
+        User user = (User) req.getSession().getAttribute("user");
+        req.setAttribute("size", user.getBasketSize());
         req.setAttribute("productList", productService.getAll());
-        req.getRequestDispatcher("/products.jsp").forward(req, resp);
+        req.getRequestDispatcher("/products_user.jsp").forward(req, resp);
     }
 }

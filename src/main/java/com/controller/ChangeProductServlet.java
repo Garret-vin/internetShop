@@ -64,7 +64,7 @@ public class ChangeProductServlet extends HttpServlet {
                 product.setPrice(price);
                 infoMessage += " was changed to " + product;
                 logger.info(infoMessage);
-                resp.sendRedirect("/products");
+                resp.sendRedirect("/admin/products");
             }
         }
     }

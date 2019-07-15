@@ -33,7 +33,7 @@
     </table>
 
     <br>
-    <button><a href="/products">Товары</a></button>
+    <button><a href="/admin/products">Товары</a></button>
     <button><a href="/">Выйти</a></button>
 
 </div>

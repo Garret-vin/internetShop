@@ -13,7 +13,7 @@
     <input type="submit" value="Добавить товар"></form>
 </form>
 
-<button><a href="/products">Вернуться</a></button>
+<button><a href="/admin/products">Вернуться</a></button>
 
 </body>
 </html>
