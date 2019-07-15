@@ -5,7 +5,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet("/payment/confirm")
@@ -20,7 +19,6 @@ public class PaymentConfirmServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
         String code = (String) req.getSession().getAttribute("code");
         String confirm = req.getParameter("confirm");
         if (code.equals(confirm)) {
