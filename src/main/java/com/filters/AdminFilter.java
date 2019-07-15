@@ -16,7 +16,7 @@ import java.io.IOException;
 @WebFilter("/admin/*")
 public class AdminFilter implements Filter {
 
-    FilterConfig filterConfig;
+    private FilterConfig filterConfig;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

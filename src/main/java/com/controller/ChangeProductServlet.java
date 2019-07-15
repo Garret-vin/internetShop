@@ -42,7 +42,7 @@ public class ChangeProductServlet extends HttpServlet {
         String description = req.getParameter("description");
         String enteredPrice = req.getParameter("price");
         Double price = 0.0;
-        if (enteredPrice != null && !enteredPrice.equals("")) {
+        if (enteredPrice != null && !enteredPrice.isEmpty()) {
             price = Double.valueOf(enteredPrice);
         }
 

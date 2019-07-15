@@ -32,16 +32,14 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> getById(Long id) {
-        List<User> allUsers = getAll();
-        return allUsers.stream()
+        return Database.users.stream()
                 .filter(user -> user.getId().equals(id))
                 .findFirst();
     }
 
     @Override
     public Optional<User> getByLogin(String login) {
-        List<User> allUsers = getAll();
-        return allUsers.stream()
+        return Database.users.stream()
                 .filter(user -> user.getLogin().equals(login))
                 .findFirst();
     }
