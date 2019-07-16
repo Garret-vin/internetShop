@@ -42,6 +42,7 @@ public class User {
     public void addProductToBasket(Product product) {
         basket.add(product);
     }
+
     public String getEmail() {
         return email;
     }

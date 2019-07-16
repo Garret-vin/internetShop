@@ -1,9 +1,9 @@
 package com.controller;
 
+import com.factory.MailServiceFactory;
 import com.model.Code;
 import com.model.User;
 import com.service.MailService;
-import com.service.impl.MailServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,7 +16,7 @@ import java.io.IOException;
 @WebServlet("/payment")
 public class PaymentServlet extends HttpServlet {
 
-    private static final MailService mailService = new MailServiceImpl();
+    private static final MailService mailService = MailServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -32,7 +32,9 @@ public class PaymentServlet extends HttpServlet {
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
         Code code = new Code(user);
-        mailService.sendConfirmCode(code);
+
+        new Thread(() -> mailService.sendConfirmCode(code)).start();
+
         session.setAttribute("code", code.getCode());
         resp.sendRedirect("/payment/confirm");
     }

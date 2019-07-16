@@ -12,11 +12,11 @@
 </head>
 <body>
 
-    ${message}
+${message}
 
-    <form action="/payment/confirm" method="post">
-        Введите пароль<input type="text" name="confirm">
-        <input type="submit" value="Отправить">
-    </form>
+<form action="/payment/confirm" method="post">
+    Введите пароль<input type="text" name="confirm">
+    <input type="submit" value="Отправить">
+</form>
 </body>
 </html>

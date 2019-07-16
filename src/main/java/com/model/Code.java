@@ -9,7 +9,7 @@ public class Code {
 
     public Code(User user) {
         this.user = user;
-        this.code = UUID.randomUUID().toString().substring(0,4);
+        this.code = UUID.randomUUID().toString().substring(0, 4);
     }
 
     public User getUser() {
