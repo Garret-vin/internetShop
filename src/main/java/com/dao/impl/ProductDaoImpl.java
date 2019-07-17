@@ -3,6 +3,7 @@ package com.dao.impl;
 import com.dao.ProductDao;
 import com.model.Product;
 import com.utils.Database;
+import com.utils.IdGeneratorUtil;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public void add(Product product) {
+        product.setId(IdGeneratorUtil.getProductId());
         Database.products.add(product);
         logger.info("Product " + product + " was added in system.");
     }
@@ -28,6 +30,14 @@ public class ProductDaoImpl implements ProductDao {
         } else {
             logger.warn("Can't delete product. Reason: product not found!");
         }
+    }
+
+    @Override
+    public void update(Product oldProduct, Product newProduct) {
+        oldProduct.setName(newProduct.getName());
+        oldProduct.setDescription(newProduct.getDescription());
+        oldProduct.setPrice(newProduct.getPrice());
+        logger.info(oldProduct + " was updated");
     }
 
     @Override

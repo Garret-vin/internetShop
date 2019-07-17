@@ -1,6 +1,6 @@
 package com.model;
 
-import java.util.UUID;
+import java.util.Random;
 
 public class Code {
 
@@ -9,22 +9,18 @@ public class Code {
 
     public Code(User user) {
         this.user = user;
-        this.code = UUID.randomUUID().toString().substring(0, 4);
+        this.code = generate();
     }
 
     public User getUser() {
         return user;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public String getCode() {
         return code;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    private String generate() {
+        return String.valueOf(new Random().nextInt(9000) + 1000);
     }
 }

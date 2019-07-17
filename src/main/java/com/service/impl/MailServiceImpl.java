@@ -1,6 +1,6 @@
 package com.service.impl;
 
-import com.model.Code;
+import com.model.Order;
 import com.service.MailService;
 import org.apache.log4j.Logger;
 
@@ -19,7 +19,7 @@ public class MailServiceImpl implements MailService {
     private static final Logger logger = Logger.getLogger(MailServiceImpl.class);
 
     @Override
-    public void sendConfirmCode(Code code) {
+    public void sendConfirmCode(Order order) {
         final String username = "batononlineshop@gmail.com";
         final String password = "123qwe-=";
 
@@ -41,15 +41,15 @@ public class MailServiceImpl implements MailService {
             message.setFrom(new InternetAddress(username));
             message.setRecipients(
                     Message.RecipientType.TO,
-                    InternetAddress.parse(code.getUser().getEmail())
+                    InternetAddress.parse(order.getEmail())
             );
             message.setSubject("Confirm password \"Online shop\"");
-            message.setText(code.getCode());
+            message.setText(order.getConfirmCode());
 
             Transport.send(message);
-            logger.info("Message send succesfull to " + code.getUser());
+            logger.info("Message send succesfull to " + order.getUser());
         } catch (MessagingException e) {
-            logger.error("An error occurred while sending message to " + code.getUser(), e);
+            logger.error("An error occurred while sending message to " + order.getUser(), e);
         }
     }
 }

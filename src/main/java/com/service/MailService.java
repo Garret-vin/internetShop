@@ -1,8 +1,8 @@
 package com.service;
 
-import com.model.Code;
+import com.model.Order;
 
 public interface MailService {
 
-    void sendConfirmCode(Code code);
+    void sendConfirmCode(Order order);
 }

@@ -1,6 +1,7 @@
 package com.controller;
 
 import com.factory.UserServiceFactory;
+import com.model.Basket;
 import com.model.User;
 import com.service.UserService;
 
@@ -43,6 +44,8 @@ public class LoginServlet extends HttpServlet {
             if ("admin".equals(registeredUser.getRole())) {
                 resp.sendRedirect("/admin/users");
             } else {
+                Basket basket = new Basket(registeredUser);
+                session.setAttribute("basket", basket);
                 resp.sendRedirect("/user/products");
             }
         } else {

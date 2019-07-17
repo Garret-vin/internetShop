@@ -1,8 +1,8 @@
 package com.controller;
 
 import com.factory.ProductServiceFactory;
+import com.model.Basket;
 import com.model.Product;
-import com.model.User;
 import com.service.ProductService;
 
 import javax.servlet.ServletException;
@@ -21,10 +21,12 @@ public class UserBuyServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        Long id = Long.valueOf(req.getParameter("id"));
-        User user = (User) req.getSession().getAttribute("user");
-        Optional<Product> optionalProduct = productService.getById(id);
-        optionalProduct.ifPresent(user::addProductToBasket);
+        Long productId = Long.valueOf(req.getParameter("id"));
+        Basket basket = (Basket) req.getSession().getAttribute("basket");
+
+        Optional<Product> optionalProduct = productService.getById(productId);
+        optionalProduct.ifPresent(basket::addProduct);
+
         resp.sendRedirect("/user/products");
     }
 }

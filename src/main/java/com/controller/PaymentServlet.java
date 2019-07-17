@@ -1,7 +1,9 @@
 package com.controller;
 
 import com.factory.MailServiceFactory;
+import com.model.Basket;
 import com.model.Code;
+import com.model.Order;
 import com.model.User;
 import com.service.MailService;
 
@@ -30,12 +32,18 @@ public class PaymentServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         HttpSession session = req.getSession();
+
         User user = (User) session.getAttribute("user");
+        Basket basket = (Basket) session.getAttribute("basket");
         Code code = new Code(user);
+        String phoneNumber = req.getParameter("phone");
+        String address = req.getParameter("address");
+        String email = req.getParameter("email");
 
-        new Thread(() -> mailService.sendConfirmCode(code)).start();
+        Order order = new Order(user, basket, code, email, phoneNumber, address);
+        new Thread(() -> mailService.sendConfirmCode(order)).start();
 
-        session.setAttribute("code", code.getCode());
+        session.setAttribute("code", order.getConfirmCode());
         resp.sendRedirect("/payment/confirm");
     }
 }

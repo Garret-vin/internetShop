@@ -23,6 +23,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void update(Product oldProduct, Product newProduct) {
+        productDao.update(oldProduct, newProduct);
+    }
+
+    @Override
     public List<Product> getAll() {
         return productDao.getAll();
     }

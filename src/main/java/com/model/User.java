@@ -1,21 +1,14 @@
 package com.model;
 
-import com.utils.IdGeneratorUtil;
-
-import java.util.List;
-
 public class User {
 
     private Long id;
-    private Basket basket;
     private String email;
     private String login;
     private String password;
     private String role;
 
     public User(String email, String login, String password, String role) {
-        this.id = IdGeneratorUtil.getUserId();
-        this.basket = new Basket();
         this.email = email;
         this.login = login;
         this.password = password;
@@ -28,18 +21,6 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public int getBasketSize() {
-        return basket.getSize();
-    }
-
-    public List<Product> getBasketList() {
-        return basket.getProductList();
-    }
-
-    public void addProductToBasket(Product product) {
-        basket.add(product);
     }
 
     public String getEmail() {

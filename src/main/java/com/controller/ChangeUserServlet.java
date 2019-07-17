@@ -33,7 +33,7 @@ public class ChangeUserServlet extends HttpServlet {
             req.setAttribute("enteredConfirm", user.getPassword());
             req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
         } else {
-            logger.warn("Error: Can't edit user. Reason: user not found!");
+            logger.error("Error: Can't edit user. Reason: user not found!");
             resp.sendRedirect("/admin/users");
         }
     }
@@ -46,12 +46,13 @@ public class ChangeUserServlet extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirm");
+        String role = req.getParameter("role");
 
         Long id = Long.valueOf(req.getParameter("id"));
-        User user;
+        User oldUser;
         Optional<User> optionalUser = userService.getById(id);
         if (optionalUser.isPresent()) {
-            user = optionalUser.get();
+            oldUser = optionalUser.get();
             if (email.isEmpty() || login.isEmpty() || password.isEmpty()) {
                 req.setAttribute("error", "Empty fields!");
                 req.setAttribute("enteredLogin", login);
@@ -64,12 +65,8 @@ public class ChangeUserServlet extends HttpServlet {
                 req.setAttribute("enteredEmail", email);
                 req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
             } else {
-                String infoMessage = user.toString();
-                user.setLogin(login);
-                user.setEmail(email);
-                user.setPassword(password);
-                infoMessage += " was changed to " + user;
-                logger.info(infoMessage);
+                User newUser = new User(email, login, password, role);
+                userService.update(oldUser, newUser);
                 resp.sendRedirect("/admin/users");
             }
         }

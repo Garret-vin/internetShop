@@ -5,10 +5,20 @@ import java.util.List;
 
 public class Basket {
 
+    private User user;
     private List<Product> productList;
 
-    public Basket() {
+    public Basket(User user) {
+        this.user = user;
         this.productList = new ArrayList<>();
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<Product> getProductList() {
@@ -19,7 +29,7 @@ public class Basket {
         return productList.size();
     }
 
-    public void add(Product product) {
+    public void addProduct(Product product) {
         productList.add(product);
     }
 

@@ -1,7 +1,7 @@
 package com.controller;
 
 import com.factory.ProductServiceFactory;
-import com.model.User;
+import com.model.Basket;
 import com.service.ProductService;
 
 import javax.servlet.ServletException;
@@ -19,8 +19,8 @@ public class UserProductsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        User user = (User) req.getSession().getAttribute("user");
-        req.setAttribute("size", user.getBasketSize());
+        Basket basket = (Basket) req.getSession().getAttribute("basket");
+        req.setAttribute("size", basket.getSize());
         req.setAttribute("productList", productService.getAll());
         req.getRequestDispatcher("/products_user.jsp").forward(req, resp);
     }
