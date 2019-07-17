@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebServlet("/change/user")
+@WebServlet("/admin/change/user")
 public class ChangeUserServlet extends HttpServlet {
 
     private static final UserService userService = UserServiceFactory.getInstance();

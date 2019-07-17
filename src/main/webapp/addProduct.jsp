@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<form action="/add/product" method="post">
+<form action="/admin/add/product" method="post">
     Название <input type="text" name="name"> <br>
     Описание <input type="text" name="description"> <br>
     Цена <input type="number" step="0.01" min="0" placeholder="0,00" name="price"> <br>

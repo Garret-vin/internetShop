@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/add/product")
+@WebServlet("/admin/add/product")
 public class AddProductServlet extends HttpServlet {
 
     private static final ProductService productService = ProductServiceFactory.getInstance();

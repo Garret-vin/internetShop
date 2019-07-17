@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<button><a href="/add/product">Добавить товар</a></button>
+<button><a href="/admin/add/product">Добавить товар</a></button>
 <br>
 <table border="1">
 
@@ -20,9 +20,9 @@
             <td>${product.name}</td>
             <td>${product.description}</td>
             <td>${product.price}</td>
-            <td><a href="/change/product?id=${product.id}">Изменить</a></td>
+            <td><a href="/admin/change/product?id=${product.id}">Изменить</a></td>
             <td>
-                <button><a href="/delete/product?id=${product.id}">Удалить</a></button>
+                <button><a href="/admin/delete/product?id=${product.id}">Удалить</a></button>
             </td>
         </tr>
     </c:forEach>

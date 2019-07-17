@@ -8,7 +8,7 @@
 
 ${error}
 
-<form action="/change/user?id=${userId}" method="post">
+<form action="/admin/change/user?id=${userId}" method="post">
     Login <input type="text" name="login" value="${enteredLogin}"> <br>
     E-mail <input type="email" name="email" value="${enteredEmail}"> <br>
     Password <input type="password" name="password" value="${enteredPassword}"> <br>

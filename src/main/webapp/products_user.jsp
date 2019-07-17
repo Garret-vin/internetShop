@@ -7,9 +7,10 @@
 <body>
 
 
-<p>Количество товара в корзине: ${size}</p>
-<a href="/payment">Корзина</a>
-<br>
+<p>Количество товара в корзине: ${size} <br>
+    <a href="/payment">Корзина</a>
+</p>
+
 <table border="1">
 
     <tr>
