@@ -1,11 +1,13 @@
 package com.controller;
 
 import com.factory.MailServiceFactory;
+import com.factory.OrderServiceFactory;
 import com.model.Basket;
 import com.model.Code;
 import com.model.Order;
 import com.model.User;
 import com.service.MailService;
+import com.service.OrderService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,6 +21,7 @@ import java.io.IOException;
 public class PaymentServlet extends HttpServlet {
 
     private static final MailService mailService = MailServiceFactory.getInstance();
+    private static final OrderService orderService = OrderServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -41,6 +44,7 @@ public class PaymentServlet extends HttpServlet {
         String email = req.getParameter("email");
 
         Order order = new Order(user, basket, code, email, phoneNumber, address);
+        orderService.add(order);
         new Thread(() -> mailService.sendConfirmCode(order)).start();
 
         session.setAttribute("code", order.getConfirmCode());

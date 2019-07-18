@@ -46,4 +46,16 @@ public class Order {
     public String getAddress() {
         return address;
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "user=" + user +
+                ", basket=" + basket +
+                ", code=" + code +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", address='" + address + '\'' +
+                '}';
+    }
 }
