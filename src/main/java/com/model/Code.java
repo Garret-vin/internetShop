@@ -1,5 +1,7 @@
 package com.model;
 
+import com.utils.CodeGeneratorUtil;
+
 import java.util.Random;
 
 public class Code {
@@ -9,7 +11,7 @@ public class Code {
 
     public Code(User user) {
         this.user = user;
-        this.code = generate();
+        this.code = CodeGeneratorUtil.generate();
     }
 
     public User getUser() {
@@ -18,9 +20,5 @@ public class Code {
 
     public String getCode() {
         return code;
-    }
-
-    private String generate() {
-        return String.valueOf(new Random().nextInt(9000) + 1000);
     }
 }
