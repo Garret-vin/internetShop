@@ -2,8 +2,6 @@ package com.model;
 
 import com.utils.CodeGeneratorUtil;
 
-import java.util.Random;
-
 public class Code {
 
     private User user;
