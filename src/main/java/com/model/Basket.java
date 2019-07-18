@@ -29,8 +29,15 @@ public class Basket {
         return productList.size();
     }
 
-    public void addProduct(Product product) {
+    public void add(Product product) {
         productList.add(product);
     }
 
+    @Override
+    public String toString() {
+        return "Basket{" +
+                "user=" + user +
+                ", productList=" + productList +
+                '}';
+    }
 }

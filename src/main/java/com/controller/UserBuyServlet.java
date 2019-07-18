@@ -1,8 +1,10 @@
 package com.controller;
 
+import com.factory.BasketServiceFactory;
 import com.factory.ProductServiceFactory;
 import com.model.Basket;
 import com.model.Product;
+import com.service.BasketService;
 import com.service.ProductService;
 
 import javax.servlet.ServletException;
@@ -17,6 +19,7 @@ import java.util.Optional;
 public class UserBuyServlet extends HttpServlet {
 
     private static final ProductService productService = ProductServiceFactory.getInstance();
+    private static final BasketService basketService = BasketServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -24,9 +27,13 @@ public class UserBuyServlet extends HttpServlet {
         Long productId = Long.valueOf(req.getParameter("id"));
         Basket basket = (Basket) req.getSession().getAttribute("basket");
 
+        Product product = null;
         Optional<Product> optionalProduct = productService.getById(productId);
-        optionalProduct.ifPresent(basket::addProduct);
+        if (optionalProduct.isPresent()) {
+            product = optionalProduct.get();
+        }
 
+        basketService.addProduct(basket, product);
         resp.sendRedirect("/user/products");
     }
 }

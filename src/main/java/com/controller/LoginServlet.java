@@ -1,8 +1,10 @@
 package com.controller;
 
+import com.factory.BasketServiceFactory;
 import com.factory.UserServiceFactory;
 import com.model.Basket;
 import com.model.User;
+import com.service.BasketService;
 import com.service.UserService;
 
 import javax.servlet.ServletException;
@@ -18,6 +20,7 @@ import java.util.Optional;
 public class LoginServlet extends HttpServlet {
 
     private static final UserService userService = UserServiceFactory.getInstance();
+    private static final BasketService basketService = BasketServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -45,6 +48,7 @@ public class LoginServlet extends HttpServlet {
                 resp.sendRedirect("/admin/users");
             } else {
                 Basket basket = new Basket(registeredUser);
+                basketService.add(basket);
                 session.setAttribute("basket", basket);
                 resp.sendRedirect("/user/products");
             }

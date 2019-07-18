@@ -47,7 +47,7 @@ public class PaymentServlet extends HttpServlet {
         orderService.add(order);
         new Thread(() -> mailService.sendConfirmCode(order)).start();
 
-        session.setAttribute("code", order.getConfirmCode());
+        session.setAttribute("orderId", order.getId());
         resp.sendRedirect("/payment/confirm");
     }
 }

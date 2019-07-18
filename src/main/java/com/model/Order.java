@@ -2,6 +2,7 @@ package com.model;
 
 public class Order {
 
+    private Long id;
     private User user;
     private Basket basket;
     private Code code;
@@ -17,6 +18,14 @@ public class Order {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.address = address;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getConfirmCode() {
