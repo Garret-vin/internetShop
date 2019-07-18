@@ -8,11 +8,14 @@
 
 ${error}
 
-<form action="/change/user?id=${userId}" method="post">
+<form action="/admin/change/user?id=${userId}" method="post">
     Login <input type="text" name="login" value="${enteredLogin}"> <br>
     E-mail <input type="email" name="email" value="${enteredEmail}"> <br>
     Password <input type="password" name="password" value="${enteredPassword}"> <br>
     Confirm password <input type="password" name="confirm" value="${enteredConfirm}"> <br>
+    Выберите роль:<br>
+    <input type="radio" name="role" value="user">Пользователь<br>
+    <input type="radio" name="role" value="admin">Администратор<br>
     <input type="submit" value="Подтвердить">
 </form>
 

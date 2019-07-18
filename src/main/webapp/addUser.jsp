@@ -8,7 +8,7 @@
 
 ${error}
 
-<form action="/add/user" method="post">
+<form action="/admin/add/user" method="post">
     Login <input type="text" name="login" value="${enteredLogin}"> <br>
     E-mail <input type="email" name="email" value="${enteredEmail}"> <br>
     Password <input type="password" name="password"> <br>

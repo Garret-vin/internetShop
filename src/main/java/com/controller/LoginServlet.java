@@ -1,7 +1,10 @@
 package com.controller;
 
+import com.factory.BasketServiceFactory;
 import com.factory.UserServiceFactory;
+import com.model.Basket;
 import com.model.User;
+import com.service.BasketService;
 import com.service.UserService;
 
 import javax.servlet.ServletException;
@@ -17,6 +20,14 @@ import java.util.Optional;
 public class LoginServlet extends HttpServlet {
 
     private static final UserService userService = UserServiceFactory.getInstance();
+    private static final BasketService basketService = BasketServiceFactory.getInstance();
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        req.getSession().invalidate();
+        req.getRequestDispatcher("/index.jsp").forward(req, resp);
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -36,7 +47,10 @@ public class LoginServlet extends HttpServlet {
             if ("admin".equals(registeredUser.getRole())) {
                 resp.sendRedirect("/admin/users");
             } else {
-                resp.sendRedirect("/products");
+                Basket basket = new Basket(registeredUser);
+                basketService.add(basket);
+                session.setAttribute("basket", basket);
+                resp.sendRedirect("/user/products");
             }
         } else {
             req.setAttribute("error", "Пользователь с таким логином и паролем не найден");

@@ -11,6 +11,8 @@ public interface UserDao {
 
     void remove(Long id);
 
+    void update(User oldUser, User newUser);
+
     Optional<User> getById(Long id);
 
     Optional<User> getByLogin(String login);

@@ -3,6 +3,7 @@ package com.dao.impl;
 import com.dao.UserDao;
 import com.model.User;
 import com.utils.Database;
+import com.utils.IdGeneratorUtil;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void add(User user) {
+        user.setId(IdGeneratorUtil.getUserId());
         Database.users.add(user);
         logger.info("User " + user + " was added in system.");
     }
@@ -28,6 +30,15 @@ public class UserDaoImpl implements UserDao {
         } else {
             logger.warn("Can't delete user. Reason: user not found!");
         }
+    }
+
+    @Override
+    public void update(User oldUser, User newUser) {
+        oldUser.setLogin(newUser.getLogin());
+        oldUser.setEmail(newUser.getEmail());
+        oldUser.setPassword(newUser.getPassword());
+        oldUser.setRole(newUser.getRole());
+        logger.info(oldUser + " was updated");
     }
 
     @Override

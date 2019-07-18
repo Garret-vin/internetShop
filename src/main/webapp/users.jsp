@@ -9,7 +9,7 @@
 
 <div align="left">
 
-    <button><a href="/add/user">Добавить пользователя</a></button>
+    <button><a href="/admin/add/user">Добавить пользователя</a></button>
 
     <table border="1">
         <tr>
@@ -23,17 +23,17 @@
                 <td>${user.login}</td>
                 <td>${user.password}</td>
                 <td>
-                    <button><a href="/change/user?id=${user.id}">Изменить</a></button>
+                    <button><a href="/admin/change/user?id=${user.id}">Изменить</a></button>
                 </td>
                 <td>
-                    <button><a href="/delete/user?id=${user.id}">Удалить</a></button>
+                    <button><a href="/admin/delete/user?id=${user.id}">Удалить</a></button>
                 </td>
             </tr>
         </c:forEach>
     </table>
 
     <br>
-    <button><a href="/products">Товары</a></button>
+    <button><a href="/admin/products">Товары</a></button>
     <button><a href="/">Выйти</a></button>
 
 </div>
