@@ -41,30 +41,26 @@ public class ChangeProductServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
+        Long id = Long.valueOf(req.getParameter("id"));
         String name = req.getParameter("name");
         String description = req.getParameter("description");
         String enteredPrice = req.getParameter("price");
+
         Double price = 0.0;
         if (enteredPrice != null && !enteredPrice.isEmpty()) {
             price = Double.valueOf(enteredPrice);
         }
 
-        Long id = Long.valueOf(req.getParameter("id"));
-        Product oldProduct;
-        Optional<Product> optionalProduct = productService.getById(id);
-        if (optionalProduct.isPresent()) {
-            oldProduct = optionalProduct.get();
-            if (name.isEmpty() || description.isEmpty()) {
-                req.setAttribute("error", "Empty fields!");
-                req.setAttribute("oldName", name);
-                req.setAttribute("oldDescription", description);
-                req.setAttribute("oldPrice", price);
-                req.getRequestDispatcher("/change_product.jsp").forward(req, resp);
-            } else {
-                Product newProduct = new Product(name, description, price);
-                productService.update(oldProduct, newProduct);
-                resp.sendRedirect("/admin/products");
-            }
+        if (name.isEmpty() || description.isEmpty()) {
+            req.setAttribute("error", "Empty fields!");
+            req.setAttribute("oldName", name);
+            req.setAttribute("oldDescription", description);
+            req.setAttribute("oldPrice", price);
+            req.getRequestDispatcher("/change_product.jsp").forward(req, resp);
+        } else {
+            Product product = new Product(id, name, description, price);
+            productService.update(product);
+            resp.sendRedirect("/admin/products");
         }
     }
 }

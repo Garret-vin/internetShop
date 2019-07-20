@@ -1,7 +1,7 @@
 package com.factory;
 
 import com.dao.ProductDao;
-import com.dao.impl.ProductDaoImpl;
+import com.dao.impl.ProductMySQLDaoImpl;
 
 public class ProductDaoFactory {
 
@@ -12,7 +12,7 @@ public class ProductDaoFactory {
 
     public static synchronized ProductDao getInstance() {
         if (instance == null) {
-            instance = new ProductDaoImpl();
+            instance = new ProductMySQLDaoImpl();
         }
         return instance;
     }

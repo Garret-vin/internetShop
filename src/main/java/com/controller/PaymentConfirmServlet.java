@@ -1,7 +1,10 @@
 package com.controller;
 
+import com.factory.BasketServiceFactory;
 import com.factory.OrderServiceFactory;
 import com.model.Order;
+import com.model.User;
+import com.service.BasketService;
 import com.service.OrderService;
 
 import javax.servlet.ServletException;
@@ -16,6 +19,7 @@ import java.util.Optional;
 public class PaymentConfirmServlet extends HttpServlet {
 
     private static final OrderService orderService = OrderServiceFactory.getInstance();
+    private static final BasketService basketService = BasketServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -26,14 +30,15 @@ public class PaymentConfirmServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        Long orderId = (Long) req.getSession().getAttribute("orderId");
         String confirm = req.getParameter("confirm");
+        User user = (User) req.getSession().getAttribute("user");
 
         Order order = null;
-        Optional<Order> optionalOrder = orderService.getById(orderId);
+        Optional<Order> optionalOrder = orderService.getLastOrderForUser(user);
         if (optionalOrder.isPresent()) {
             order = optionalOrder.get();
-            if (order.getConfirmCode().equals(confirm)) {
+            if (order.getCode().getValue().equals(confirm)) {
+                basketService.clean(user);
                 req.setAttribute("message", "Покупка успешно совершена!");
             } else {
                 req.setAttribute("message", "Неверный код. Введите заново!");

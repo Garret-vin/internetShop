@@ -12,7 +12,7 @@ public interface UserService {
 
     void remove(Long id);
 
-    void update(User oldUser, User newUser);
+    void update(User user);
 
     Map<String, String> getMapLoginToEmail();
 

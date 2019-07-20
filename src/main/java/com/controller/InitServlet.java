@@ -24,8 +24,8 @@ public class InitServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        User admin = new User("test@test", "test", "test", "admin");
-        User user = new User("garret.ork@gmail.com", "user", "user", "user");
+        User admin = new User("test", "test@test", "test", "admin");
+        User user = new User("user", "garret.ork@gmail.com", "user", "user");
         userService.add(admin);
         userService.add(user);
     }

@@ -1,11 +1,12 @@
 package com.controller;
 
+import com.factory.CodeServiceFactory;
 import com.factory.MailServiceFactory;
 import com.factory.OrderServiceFactory;
-import com.model.Basket;
 import com.model.Code;
 import com.model.Order;
 import com.model.User;
+import com.service.CodeService;
 import com.service.MailService;
 import com.service.OrderService;
 
@@ -16,12 +17,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Optional;
 
 @WebServlet("/payment")
 public class PaymentServlet extends HttpServlet {
 
     private static final MailService mailService = MailServiceFactory.getInstance();
     private static final OrderService orderService = OrderServiceFactory.getInstance();
+    private static final CodeService codeService = CodeServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -37,17 +40,21 @@ public class PaymentServlet extends HttpServlet {
         HttpSession session = req.getSession();
 
         User user = (User) session.getAttribute("user");
-        Basket basket = (Basket) session.getAttribute("basket");
-        Code code = new Code(user);
         String phoneNumber = req.getParameter("phone");
         String address = req.getParameter("address");
         String email = req.getParameter("email");
+        codeService.add(new Code(user));
 
-        Order order = new Order(user, basket, code, email, phoneNumber, address);
+        Code code = null;
+        Optional<Code> optionalCode = codeService.getLastCodeForUser(user);
+        if (optionalCode.isPresent()) {
+            code = optionalCode.get();
+        }
+
+        Order order = new Order(user, code, email, phoneNumber, address);
         orderService.add(order);
         new Thread(() -> mailService.sendConfirmCode(order)).start();
 
-        session.setAttribute("orderId", order.getId());
         resp.sendRedirect("/payment/confirm");
     }
 }

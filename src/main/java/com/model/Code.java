@@ -2,21 +2,62 @@ package com.model;
 
 import com.utils.CodeGeneratorUtil;
 
+import java.util.Objects;
+
 public class Code {
 
+    private Long id;
+    private String value;
     private User user;
-    private String code;
 
     public Code(User user) {
         this.user = user;
-        this.code = CodeGeneratorUtil.generate();
+        this.value = CodeGeneratorUtil.generate();
+    }
+
+    public Code(Long id, String value, User user) {
+        this.id = id;
+        this.user = user;
+        this.value = value;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public User getUser() {
         return user;
     }
 
-    public String getCode() {
-        return code;
+    public String getValue() {
+        return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Code code = (Code) o;
+        return id.equals(code.id) &&
+                value.equals(code.value) &&
+                user.equals(code.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, value, user);
+    }
+
+    @Override
+    public String toString() {
+        return "Code{" +
+                "id=" + id +
+                ", value='" + value + '\'' +
+                ", user=" + user +
+                '}';
     }
 }

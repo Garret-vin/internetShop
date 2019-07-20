@@ -33,11 +33,17 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public void update(Product oldProduct, Product newProduct) {
-        oldProduct.setName(newProduct.getName());
-        oldProduct.setDescription(newProduct.getDescription());
-        oldProduct.setPrice(newProduct.getPrice());
-        logger.info(oldProduct + " was updated");
+    public void update(Product product) {
+        Optional<Product> optionalProduct = getById(product.getId());
+        if (optionalProduct.isPresent()) {
+            Product oldProduct = optionalProduct.get();
+            oldProduct.setName(product.getName());
+            oldProduct.setDescription(product.getDescription());
+            oldProduct.setPrice(product.getPrice());
+            logger.info(oldProduct + " was updated");
+        } else {
+            logger.warn("Updating failed! Reason: product not found!");
+        }
     }
 
     @Override

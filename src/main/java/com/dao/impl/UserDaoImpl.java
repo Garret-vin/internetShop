@@ -33,12 +33,18 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void update(User oldUser, User newUser) {
-        oldUser.setLogin(newUser.getLogin());
-        oldUser.setEmail(newUser.getEmail());
-        oldUser.setPassword(newUser.getPassword());
-        oldUser.setRole(newUser.getRole());
-        logger.info(oldUser + " was updated");
+    public void update(User user) {
+        Optional<User> oldUserOptional = getById(user.getId());
+        if (oldUserOptional.isPresent()) {
+            User oldUser = oldUserOptional.get();
+            oldUser.setLogin(user.getLogin());
+            oldUser.setEmail(user.getEmail());
+            oldUser.setPassword(user.getPassword());
+            oldUser.setRole(user.getRole());
+            logger.info(oldUser + " was updated");
+        } else {
+            logger.warn("Updating failed! Reason: user not found!");
+        }
     }
 
     @Override

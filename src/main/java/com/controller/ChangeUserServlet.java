@@ -42,33 +42,29 @@ public class ChangeUserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
-        String email = req.getParameter("email");
+        Long id = Long.valueOf(req.getParameter("id"));
         String login = req.getParameter("login");
+        String email = req.getParameter("email");
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirm");
         String role = req.getParameter("role");
 
-        Long id = Long.valueOf(req.getParameter("id"));
-        User oldUser;
-        Optional<User> optionalUser = userService.getById(id);
-        if (optionalUser.isPresent()) {
-            oldUser = optionalUser.get();
-            if (email.isEmpty() || login.isEmpty() || password.isEmpty()) {
-                req.setAttribute("error", "Empty fields!");
-                req.setAttribute("enteredLogin", login);
-                req.setAttribute("enteredEmail", email);
-                req.setAttribute("enteredPassword", password);
-                req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
-            } else if (!(password.equals(confirmPassword))) {
-                req.setAttribute("error", "Passwords not equals!");
-                req.setAttribute("enteredLogin", login);
-                req.setAttribute("enteredEmail", email);
-                req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
-            } else {
-                User newUser = new User(email, login, password, role);
-                userService.update(oldUser, newUser);
-                resp.sendRedirect("/admin/users");
-            }
+        if (email.isEmpty() || login.isEmpty() || password.isEmpty()) {
+            req.setAttribute("error", "Empty fields!");
+            req.setAttribute("enteredLogin", login);
+            req.setAttribute("enteredEmail", email);
+            req.setAttribute("enteredPassword", password);
+            req.setAttribute("enteredConfirm", confirmPassword);
+            req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
+        } else if (!(password.equals(confirmPassword))) {
+            req.setAttribute("error", "Passwords not equals!");
+            req.setAttribute("enteredLogin", login);
+            req.setAttribute("enteredEmail", email);
+            req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
+        } else {
+            User user = new User(id, login, email, password, role);
+            userService.update(user);
+            resp.sendRedirect("/admin/users");
         }
     }
 }

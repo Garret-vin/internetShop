@@ -1,43 +1,63 @@
 package com.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 public class Basket {
 
-    private User user;
-    private List<Product> productList;
+    private Long id;
+    private Long userId;
+    private Long productId;
 
-    public Basket(User user) {
-        this.user = user;
-        this.productList = new ArrayList<>();
+    public Basket(Long userId, Long productId) {
+        this.userId = userId;
+        this.productId = productId;
     }
 
-    public User getUser() {
-        return user;
+    public Long getId() {
+        return id;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public List<Product> getProductList() {
-        return productList;
+    public Long getUserId() {
+        return userId;
     }
 
-    public int getSize() {
-        return productList.size();
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public void add(Product product) {
-        productList.add(product);
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Basket basket = (Basket) o;
+        return id.equals(basket.id) &&
+                userId.equals(basket.userId) &&
+                productId.equals(basket.productId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userId, productId);
     }
 
     @Override
     public String toString() {
         return "Basket{" +
-                "user=" + user +
-                ", productList=" + productList +
+                "id=" + id +
+                ", userId=" + userId +
+                ", productId=" + productId +
                 '}';
     }
 }

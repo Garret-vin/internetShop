@@ -45,7 +45,7 @@ public class AddUserServlet extends HttpServlet {
                     "электронной почтой уже зарегистрирован!");
             req.getRequestDispatcher("/addUser.jsp").forward(req, resp);
         } else if (password.equals(confirmPassword)) {
-            User user = new User(email, login, password, role);
+            User user = new User(login, email, password, role);
             userService.add(user);
             resp.sendRedirect("/admin/users");
         } else {
