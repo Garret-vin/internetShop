@@ -8,26 +8,38 @@ import com.utils.DBConnector;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Optional;
 
 public class OrderMySQLDaoImpl implements OrderDao {
 
     private static final Logger logger = Logger.getLogger(OrderMySQLDaoImpl.class);
+    private static final String ADD_ORDER = "INSERT INTO orders " +
+            "(user_id, code_id, email, phone_number, address) " +
+            "VALUES (?, ?, ?, ?, ?)";
+
+    private static final String GET_BY_ID = "SELECT orders.id, orders.user_id, code_id, orders.email, " +
+            "phone_number, address, login, password, role, value " +
+            "FROM orders INNER JOIN users ON orders.user_id = users.id " +
+            "INNER JOIN code ON orders.code_id = code.id WHERE orders.id = ?";
+
+    private static final String GET_LAST_ORDER = "SELECT orders.id, orders.user_id, code_id, " +
+            "email, phone_number, address, value " +
+            "FROM orders INNER JOIN code ON orders.code_id = code.id " +
+            "WHERE orders.user_id = ? ORDER BY orders.id DESC LIMIT 1";
 
     @Override
     public void add(Order order) {
-        String query = String.format("INSERT INTO orders " +
-                        "(user_id, code_id, email, phone_number, address) " +
-                        "VALUES (%d, %d, '%s', '%s', '%s')",
-                order.getUser().getId(), order.getCode().getId(),
-                order.getEmail(), order.getPhoneNumber(), order.getAddress());
-
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            statement.execute(query);
+             PreparedStatement statement = connection.prepareStatement(ADD_ORDER)) {
+            statement.setLong(1, order.getUser().getId());
+            statement.setLong(2, order.getCode().getId());
+            statement.setString(3, order.getEmail());
+            statement.setString(4, order.getPhoneNumber());
+            statement.setString(5, order.getAddress());
+            statement.execute();
             logger.info(order + " was added to DB");
         } catch (SQLException e) {
             logger.error("Try to add order was failed!", e);
@@ -36,14 +48,10 @@ public class OrderMySQLDaoImpl implements OrderDao {
 
     @Override
     public Optional<Order> getById(Long id) {
-        String query = "SELECT orders.id, orders.user_id, code_id, orders.email, " +
-                "phone_number, address, login, password, role, value " +
-                "FROM orders INNER JOIN users ON orders.user_id = users.id " +
-                "INNER JOIN code ON orders.code_id = code.id WHERE orders.id = " + id;
-
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(query);
+             PreparedStatement statement = connection.prepareStatement(GET_BY_ID)) {
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
                 User user = new User(
@@ -74,14 +82,10 @@ public class OrderMySQLDaoImpl implements OrderDao {
 
     @Override
     public Optional<Order> getLastOrderForUser(User user) {
-        String query = String.format("SELECT orders.id, orders.user_id, code_id, " +
-                "email, phone_number, address, value " +
-                "FROM orders INNER JOIN code ON orders.code_id = code.id " +
-                "WHERE orders.user_id = %d ORDER BY orders.id DESC LIMIT 1", user.getId());
-
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(query);
+             PreparedStatement statement = connection.prepareStatement(GET_LAST_ORDER)) {
+            statement.setLong(1, user.getId());
+            ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
                 Code code = new Code(

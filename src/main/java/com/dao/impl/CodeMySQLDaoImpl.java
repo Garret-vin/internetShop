@@ -7,22 +7,28 @@ import com.utils.DBConnector;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Optional;
 
 public class CodeMySQLDaoImpl implements CodeDao {
 
     private static final Logger logger = Logger.getLogger(CodeMySQLDaoImpl.class);
+    private static final String ADD_CODE = "INSERT INTO code (user_id, value) VALUES (?, ?)";
+    private static final String GET_BY_ID = "SELECT code.id, user_id, value, login, email, password, role " +
+            "FROM code INNER JOIN users ON code.user_id = users.id WHERE code.id = ?";
+
+    private static final String GET_LAST_CODE = "SELECT * FROM code WHERE user_id = ? " +
+            "ORDER BY id DESC LIMIT 1";
 
     @Override
     public void add(Code code) {
-        String query = String.format("INSERT INTO code (user_id, value) VALUES (%d, '%s')",
-                code.getUser().getId(), code.getValue());
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            statement.execute(query);
+             PreparedStatement statement = connection.prepareStatement(ADD_CODE)) {
+            statement.setLong(1, code.getUser().getId());
+            statement.setString(2, code.getValue());
+            statement.execute();
             logger.info(code + " was added to DB");
         } catch (SQLException e) {
             logger.error("Try to add code was failed", e);
@@ -31,12 +37,10 @@ public class CodeMySQLDaoImpl implements CodeDao {
 
     @Override
     public Optional<Code> getById(Long id) {
-        String query = "SELECT code.id, user_id, value, login, email, password, role " +
-                "FROM code INNER JOIN users ON code.user_id = users.id WHERE code.id = " + id;
-
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(query);
+             PreparedStatement statement = connection.prepareStatement(GET_BY_ID)) {
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
                 User user = new User(
@@ -59,12 +63,10 @@ public class CodeMySQLDaoImpl implements CodeDao {
 
     @Override
     public Optional<Code> getLastCodeForUser(User user) {
-        String query = String.format("SELECT * FROM code WHERE user_id = %d " +
-                "ORDER BY id DESC LIMIT 1", user.getId());
-
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(query);
+             PreparedStatement statement = connection.prepareStatement(GET_LAST_CODE)) {
+            statement.setLong(1, user.getId());
+            ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
                 Code code = new Code(

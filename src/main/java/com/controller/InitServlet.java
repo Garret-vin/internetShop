@@ -1,3 +1,4 @@
+/*
 package com.controller;
 
 import com.factory.UserServiceFactory;
@@ -30,3 +31,4 @@ public class InitServlet extends HttpServlet {
         userService.add(user);
     }
 }
+*/

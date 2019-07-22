@@ -6,33 +6,36 @@ import com.utils.DBConnector;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class BasketMySQLDaoImpl implements BasketDao {
 
     private static final Logger logger = Logger.getLogger(BasketMySQLDaoImpl.class);
+    private static final String ADD_PRODUCT = "INSERT INTO basket (user_id, product_id) VALUES (?, ?)";
+    private static final String GET_SIZE = "SELECT COUNT(*) FROM basket WHERE user_id = ?";
+    private static final String CLEAN_BASKET = "DELETE FROM basket WHERE user_id = ?";
 
     @Override
     public void addProduct(Long userId, Long productId) {
-        String query = String.format("INSERT INTO basket (user_id, product_id) VALUES (%d, %d)",
-                userId, productId);
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            statement.execute(query);
+             PreparedStatement statement = connection.prepareStatement(ADD_PRODUCT)) {
+            statement.setLong(1, userId);
+            statement.setLong(2, productId);
+            statement.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Try to add product in basket failed!", e);
         }
     }
 
     @Override
     public int size(Long userId) {
-        String query = "SELECT COUNT(*) FROM basket WHERE user_id = " + userId;
         int count = 0;
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(query);
+             PreparedStatement statement = connection.prepareStatement(GET_SIZE)) {
+            statement.setLong(1, userId);
+            ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 count = resultSet.getInt(1);
             }
@@ -44,10 +47,10 @@ public class BasketMySQLDaoImpl implements BasketDao {
 
     @Override
     public void clean(User user) {
-        String query = "DELETE FROM basket WHERE user_id = " + user.getId();
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            int rows = statement.executeUpdate(query);
+             PreparedStatement statement = connection.prepareStatement(CLEAN_BASKET)) {
+            statement.setLong(1, user.getId());
+            int rows = statement.executeUpdate();
             logger.info(rows + " rows was deleted from basket");
         } catch (SQLException e) {
             logger.error("Try to clean basket was failed", e);

@@ -6,6 +6,7 @@ import com.utils.DBConnector;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,15 +17,23 @@ import java.util.Optional;
 public class ProductMySQLDaoImpl implements ProductDao {
 
     private static final Logger logger = Logger.getLogger(ProductMySQLDaoImpl.class);
+    private static final String DELETE_USER = "DELETE FROM products WHERE id = ?";
+    private static final String GET_BY_ID = "SELECT * FROM products WHERE id = ?";
+    private static final String GET_ALL = "SELECT * FROM products";
+    private static final String ADD_PRODUCT = "INSERT INTO products (name, description, price) " +
+            "VALUES (?, ?, ?)";
+
+    private static final String UPDATE_PRODUCT = "UPDATE products SET " +
+            "name = ?, description = ?, price = ? WHERE id = ?";
 
     @Override
     public void add(Product product) {
-        String query = String.format("INSERT INTO products (name, description, price) " +
-                        "VALUES ('%s', '%s', " + product.getPrice() + ")",
-                product.getName(), product.getDescription());
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            statement.execute(query);
+             PreparedStatement statement = connection.prepareStatement(ADD_PRODUCT)) {
+            statement.setString(1, product.getName());
+            statement.setString(2, product.getDescription());
+            statement.setDouble(3, product.getPrice());
+            statement.execute();
             logger.info(product + " was added to DB");
         } catch (SQLException e) {
             logger.error("Try to add product was failed", e);
@@ -33,10 +42,10 @@ public class ProductMySQLDaoImpl implements ProductDao {
 
     @Override
     public void remove(Long id) {
-        String query = String.format("DELETE FROM products WHERE id = %d", id);
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            int rows = statement.executeUpdate(query);
+             PreparedStatement statement = connection.prepareStatement(DELETE_USER)) {
+            statement.setLong(1, id);
+            int rows = statement.executeUpdate();
             logger.info(rows + " row in table products was deleted");
         } catch (SQLException e) {
             logger.error("Try to remove product was failed", e);
@@ -45,13 +54,14 @@ public class ProductMySQLDaoImpl implements ProductDao {
 
     @Override
     public void update(Product product) {
-        String query = String.format("UPDATE products SET " +
-                        "name = '%s', description = '%s', price = " + product.getPrice(),
-                product.getName(), product.getDescription());
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            statement.executeUpdate(query);
-            logger.info(product + " was updated");
+             PreparedStatement statement = connection.prepareStatement(UPDATE_PRODUCT)) {
+            statement.setString(1, product.getName());
+            statement.setString(2, product.getDescription());
+            statement.setDouble(3, product.getPrice());
+            statement.setLong(4, product.getId());
+            int columns = statement.executeUpdate();
+            logger.info(columns + " columns was updated");
         } catch (SQLException e) {
             logger.error("Try to update product was failed", e);
         }
@@ -62,7 +72,7 @@ public class ProductMySQLDaoImpl implements ProductDao {
         List<Product> productList = new ArrayList<>();
         try (Connection connection = DBConnector.connect();
              Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM products");
+            ResultSet resultSet = statement.executeQuery(GET_ALL);
 
             while (resultSet.next()) {
                 Product product = new Product(
@@ -80,10 +90,10 @@ public class ProductMySQLDaoImpl implements ProductDao {
 
     @Override
     public Optional<Product> getById(Long id) {
-        String query = String.format("SELECT * FROM products WHERE id = %d", id);
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(query);
+             PreparedStatement statement = connection.prepareStatement(GET_BY_ID)) {
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
                 Product product = new Product(
@@ -94,7 +104,7 @@ public class ProductMySQLDaoImpl implements ProductDao {
                 return Optional.of(product);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Try to get product by id was failed", e);
         }
         return Optional.empty();
     }

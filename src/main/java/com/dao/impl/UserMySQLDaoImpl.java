@@ -6,6 +6,7 @@ import com.utils.DBConnector;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,15 +17,26 @@ import java.util.Optional;
 public class UserMySQLDaoImpl implements UserDao {
 
     private static final Logger logger = Logger.getLogger(UserMySQLDaoImpl.class);
+    private static final String DELETE_USER = "DELETE FROM users WHERE id = ?";
+    private static final String GET_BY_ID = "SELECT * FROM users WHERE id = ?";
+    private static final String GET_BY_LOGIN = "SELECT * FROM users WHERE login = ?";
+    private static final String GET_ALL = "SELECT * FROM users";
+    private static final String ADD_USER = "INSERT INTO users (login, email, password, role) " +
+            "VALUES (?, ?, ?, ?)";
+
+    private static final String UPDATE_USER = "UPDATE users SET login = ?, email = ?, " +
+            "password = ?, role = ? WHERE id = ?";
 
     @Override
     public void add(User user) {
-        String query = String.format("INSERT INTO users (login, email, password, role) " +
-                        "VALUES ('%s', '%s', '%s', '%s')",
-                user.getLogin(), user.getEmail(), user.getPassword(), user.getRole());
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            statement.execute(query);
+             PreparedStatement statement = connection.prepareStatement(ADD_USER)) {
+            statement.setString(1, user.getLogin());
+            statement.setString(2, user.getEmail());
+            statement.setString(3, user.getPassword());
+            statement.setString(4, user.getRole());
+            statement.execute();
+
             logger.info(user + " was added to DB");
         } catch (SQLException e) {
             logger.error("Try to add user was failed", e);
@@ -33,10 +45,10 @@ public class UserMySQLDaoImpl implements UserDao {
 
     @Override
     public void remove(Long id) {
-        String query = String.format("DELETE FROM users WHERE id = %d", id);
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            int rows = statement.executeUpdate(query);
+             PreparedStatement statement = connection.prepareStatement(DELETE_USER)) {
+            statement.setLong(1, id);
+            int rows = statement.executeUpdate();
             logger.info(rows + " row in table users was deleted");
         } catch (SQLException e) {
             logger.error("Try to remove user was failed", e);
@@ -45,18 +57,15 @@ public class UserMySQLDaoImpl implements UserDao {
 
     @Override
     public void update(User user) {
-        String query = String.format("UPDATE users SET " +
-                        "login = '%s', " +
-                        "email = '%s', " +
-                        "password = '%s', " +
-                        "role = '%s' " +
-                        "WHERE id = %d",
-                user.getLogin(), user.getEmail(), user.getPassword(),
-                user.getRole(), user.getId());
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            statement.executeUpdate(query);
-            logger.info(user + " was updated");
+             PreparedStatement statement = connection.prepareStatement(UPDATE_USER)) {
+            statement.setString(1, user.getLogin());
+            statement.setString(2, user.getEmail());
+            statement.setString(3, user.getPassword());
+            statement.setString(4, user.getRole());
+            statement.setLong(5, user.getId());
+            int columns = statement.executeUpdate();
+            logger.info(columns + " columns was updated");
         } catch (SQLException e) {
             logger.error("Try to update user was failed", e);
         }
@@ -64,10 +73,10 @@ public class UserMySQLDaoImpl implements UserDao {
 
     @Override
     public Optional<User> getById(Long id) {
-        String query = String.format("SELECT * FROM users WHERE id = %d", id);
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(query);
+             PreparedStatement statement = connection.prepareStatement(GET_BY_ID)) {
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
                 User userFromDb = new User(
@@ -86,10 +95,10 @@ public class UserMySQLDaoImpl implements UserDao {
 
     @Override
     public Optional<User> getByLogin(String login) {
-        String query = String.format("SELECT * FROM users WHERE login = '%s'", login);
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(query);
+             PreparedStatement statement = connection.prepareStatement(GET_BY_LOGIN)) {
+            statement.setString(1, login);
+            ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
                 User userFromDb = new User(
@@ -111,7 +120,7 @@ public class UserMySQLDaoImpl implements UserDao {
         List<User> userList = new ArrayList<>();
         try (Connection connection = DBConnector.connect();
              Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM users");
+            ResultSet resultSet = statement.executeQuery(GET_ALL);
 
             while (resultSet.next()) {
                 User userFromDb = new User(
