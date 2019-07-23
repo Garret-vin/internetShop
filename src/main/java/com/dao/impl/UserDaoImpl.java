@@ -7,7 +7,9 @@ import com.utils.IdGeneratorUtil;
 import org.apache.log4j.Logger;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class UserDaoImpl implements UserDao {
 
@@ -59,6 +61,13 @@ public class UserDaoImpl implements UserDao {
         return Database.users.stream()
                 .filter(user -> user.getLogin().equals(login))
                 .findFirst();
+    }
+
+    @Override
+    public Map<String, String> getMapLoginToEmail() {
+        return Database.users
+                .stream()
+                .collect(Collectors.toMap(User::getLogin, User::getEmail));
     }
 
     @Override

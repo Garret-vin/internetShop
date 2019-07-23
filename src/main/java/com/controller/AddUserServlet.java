@@ -41,6 +41,8 @@ public class AddUserServlet extends HttpServlet {
             req.getRequestDispatcher("/addUser.jsp").forward(req, resp);
         } else if (loginToEmailMap.containsKey(login)
                 || loginToEmailMap.containsValue(email)) {
+            req.setAttribute("enteredLogin", login);
+            req.setAttribute("enteredEmail", email);
             req.setAttribute("error", "Пользователь с таким логином или " +
                     "электронной почтой уже зарегистрирован!");
             req.getRequestDispatcher("/addUser.jsp").forward(req, resp);

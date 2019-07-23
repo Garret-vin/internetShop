@@ -62,12 +62,12 @@ public class Order {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return id.equals(order.id) &&
-                user.equals(order.user) &&
-                code.equals(order.code) &&
-                email.equals(order.email) &&
-                phoneNumber.equals(order.phoneNumber) &&
-                address.equals(order.address);
+        return Objects.equals(id, order.id) &&
+                Objects.equals(user, order.user) &&
+                Objects.equals(code, order.code) &&
+                Objects.equals(email, order.email) &&
+                Objects.equals(phoneNumber, order.phoneNumber) &&
+                Objects.equals(address, order.address);
     }
 
     @Override

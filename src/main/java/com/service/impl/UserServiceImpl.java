@@ -31,9 +31,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<String, String> getMapLoginToEmail() {
-        return userDao.getAll()
-                .stream()
-                .collect(Collectors.toMap(User::getLogin, User::getEmail));
+        return userDao.getMapLoginToEmail();
     }
 
     @Override

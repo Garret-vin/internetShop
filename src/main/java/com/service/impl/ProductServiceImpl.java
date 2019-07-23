@@ -13,7 +13,7 @@ public class ProductServiceImpl implements ProductService {
     private static final ProductDao productDao = ProductDaoFactory.getInstance();
 
     @Override
-    public void addProduct(Product product) {
+    public void add(Product product) {
         productDao.add(product);
     }
 

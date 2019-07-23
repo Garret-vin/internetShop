@@ -11,7 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class UserMySQLDaoImpl implements UserDao {
@@ -21,6 +23,7 @@ public class UserMySQLDaoImpl implements UserDao {
     private static final String GET_BY_ID = "SELECT * FROM users WHERE id = ?";
     private static final String GET_BY_LOGIN = "SELECT * FROM users WHERE login = ?";
     private static final String GET_ALL = "SELECT * FROM users";
+    private static final String GET_LOGIN_TO_EMAIL = "SELECT login, email FROM users";
     private static final String ADD_USER = "INSERT INTO users (login, email, password, role) " +
             "VALUES (?, ?, ?, ?)";
 
@@ -113,6 +116,24 @@ public class UserMySQLDaoImpl implements UserDao {
             logger.error("Try to get by login user was failed", e);
         }
         return Optional.empty();
+    }
+
+    @Override
+    public Map<String, String> getMapLoginToEmail() {
+        Map<String, String> loginToEmailMap = new HashMap<>();
+        try (Connection connection = DBConnector.connect();
+             Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(GET_LOGIN_TO_EMAIL);
+
+            while (resultSet.next()) {
+                loginToEmailMap.put(
+                        resultSet.getString("login"),
+                        resultSet.getString("email"));
+            }
+        } catch (SQLException e) {
+            logger.error("Try to get login-to-email map was failed", e);
+        }
+        return loginToEmailMap;
     }
 
     @Override

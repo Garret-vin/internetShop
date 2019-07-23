@@ -42,9 +42,9 @@ public class Code {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Code code = (Code) o;
-        return id.equals(code.id) &&
-                value.equals(code.value) &&
-                user.equals(code.user);
+        return Objects.equals(id, code.id) &&
+                Objects.equals(value, code.value) &&
+                Objects.equals(user, code.user);
     }
 
     @Override

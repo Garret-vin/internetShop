@@ -42,9 +42,9 @@ public class Basket {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Basket basket = (Basket) o;
-        return id.equals(basket.id) &&
-                userId.equals(basket.userId) &&
-                productId.equals(basket.productId);
+        return Objects.equals(id, basket.id) &&
+                Objects.equals(userId, basket.userId) &&
+                Objects.equals(productId, basket.productId);
     }
 
     @Override
