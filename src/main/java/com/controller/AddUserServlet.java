@@ -48,8 +48,8 @@ public class AddUserServlet extends HttpServlet {
                     "электронной почтой уже зарегистрирован!");
             req.getRequestDispatcher("/addUser.jsp").forward(req, resp);
         } else if (password.equals(confirmPassword)) {
-            String sha256Password = DigestUtils.sha256Hex(password);
-            User user = new User(login, email, sha256Password, role);
+            String encryptedPassword = DigestUtils.sha256Hex(password);
+            User user = new User(login, email, encryptedPassword, role);
             userService.add(user);
             resp.sendRedirect("/admin/users");
         } else {

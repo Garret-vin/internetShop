@@ -30,7 +30,7 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String login = req.getParameter("login");
-        String sha256Password = DigestUtils.sha256Hex(req.getParameter("password"));
+        String encryptedPassword = DigestUtils.sha256Hex(req.getParameter("password"));
 
         User registeredUser = null;
         Optional<User> optionalUser = userService.getByLogin(login);
@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
             registeredUser = optionalUser.get();
         }
 
-        if (registeredUser != null && registeredUser.getPassword().equals(sha256Password)) {
+        if (registeredUser != null && registeredUser.getPassword().equals(encryptedPassword)) {
             HttpSession session = req.getSession();
             session.setAttribute("user", registeredUser);
             if ("admin".equals(registeredUser.getRole())) {
