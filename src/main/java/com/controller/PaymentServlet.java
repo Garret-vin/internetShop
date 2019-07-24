@@ -1,11 +1,14 @@
 package com.controller;
 
+import com.factory.BasketServiceFactory;
 import com.factory.CodeServiceFactory;
 import com.factory.MailServiceFactory;
 import com.factory.OrderServiceFactory;
+import com.model.Basket;
 import com.model.Code;
 import com.model.Order;
 import com.model.User;
+import com.service.BasketService;
 import com.service.CodeService;
 import com.service.MailService;
 import com.service.OrderService;
@@ -25,6 +28,7 @@ public class PaymentServlet extends HttpServlet {
     private static final MailService mailService = MailServiceFactory.getInstance();
     private static final OrderService orderService = OrderServiceFactory.getInstance();
     private static final CodeService codeService = CodeServiceFactory.getInstance();
+    private static final BasketService basketService = BasketServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -51,7 +55,13 @@ public class PaymentServlet extends HttpServlet {
             code = optionalCode.get();
         }
 
-        Order order = new Order(user, code, email, phoneNumber, address);
+        Long basketId = -1L;
+        Optional<Basket> optionalBasket = basketService.getBasketByUserId(user.getId());
+        if (optionalBasket.isPresent()) {
+            basketId = optionalBasket.get().getId();
+        }
+
+        Order order = new Order(basketId, user, code, email, phoneNumber, address);
         orderService.add(order);
         new Thread(() -> mailService.sendConfirmCode(order)).start();
 

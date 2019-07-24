@@ -1,19 +1,26 @@
 package com.model;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Basket {
 
     private Long id;
     private Long userId;
-    private Long productId;
+    private List<Product> productList;
 
     public Basket() {
     }
 
-    public Basket(Long userId, Long productId) {
+    public Basket(Long userId, List<Product> productList) {
         this.userId = userId;
-        this.productId = productId;
+        this.productList = productList;
+    }
+
+    public Basket(Long id, Long userId, List<Product> productList) {
+        this.id = id;
+        this.userId = userId;
+        this.productList = productList;
     }
 
     public Long getId() {
@@ -32,12 +39,12 @@ public class Basket {
         this.userId = userId;
     }
 
-    public Long getProductId() {
-        return productId;
+    public List<Product> getProductList() {
+        return productList;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
     }
 
     @Override
@@ -47,12 +54,12 @@ public class Basket {
         Basket basket = (Basket) o;
         return Objects.equals(id, basket.id) &&
                 Objects.equals(userId, basket.userId) &&
-                Objects.equals(productId, basket.productId);
+                Objects.equals(productList, basket.productList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, productId);
+        return Objects.hash(id, userId, productList);
     }
 
     @Override
@@ -60,7 +67,6 @@ public class Basket {
         return "Basket{" +
                 "id=" + id +
                 ", userId=" + userId +
-                ", productId=" + productId +
                 '}';
     }
 }

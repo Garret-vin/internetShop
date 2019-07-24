@@ -1,7 +1,10 @@
 package com.controller;
 
+import com.factory.BasketServiceFactory;
 import com.factory.UserServiceFactory;
+import com.model.Basket;
 import com.model.User;
+import com.service.BasketService;
 import com.service.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -11,12 +14,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 @WebServlet("/admin/add/user")
 public class AddUserServlet extends HttpServlet {
 
     private static final UserService userService = UserServiceFactory.getInstance();
+    private static final BasketService basketService = BasketServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -51,6 +57,12 @@ public class AddUserServlet extends HttpServlet {
             String encryptedPassword = DigestUtils.sha256Hex(password);
             User user = new User(login, email, encryptedPassword, role);
             userService.add(user);
+
+            Optional<User> optionalUser = userService.getByLogin(login);
+            if (optionalUser.isPresent()) {
+                Basket basket = new Basket(optionalUser.get().getId(), Collections.emptyList());
+                basketService.add(basket);
+            }
             resp.sendRedirect("/admin/users");
         } else {
             req.setAttribute("error", "Passwords not equals!");

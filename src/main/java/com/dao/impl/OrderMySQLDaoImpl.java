@@ -17,16 +17,16 @@ public class OrderMySQLDaoImpl implements OrderDao {
 
     private static final Logger logger = Logger.getLogger(OrderMySQLDaoImpl.class);
     private static final String ADD_ORDER = "INSERT INTO orders " +
-            "(user_id, code_id, email, phone_number, address) " +
-            "VALUES (?, ?, ?, ?, ?)";
+            "(basket_id, user_id, code_id, email, phone_number, address) " +
+            "VALUES (?, ?, ?, ?, ?, ?)";
 
-    private static final String GET_BY_ID = "SELECT orders.id, orders.user_id, code_id, orders.email, " +
-            "phone_number, address, login, password, role, value " +
+    private static final String GET_BY_ID = "SELECT orders.id, basket_id, orders.user_id, code_id, " +
+            "orders.email, phone_number, address, login, password, role, value " +
             "FROM orders INNER JOIN users ON orders.user_id = users.id " +
             "INNER JOIN code ON orders.code_id = code.id WHERE orders.id = ?";
 
-    private static final String GET_LAST_ORDER = "SELECT orders.id, orders.user_id, code_id, " +
-            "email, phone_number, address, value " +
+    private static final String GET_LAST_ORDER = "SELECT orders.id, basket_id, orders.user_id, " +
+            "code_id, email, phone_number, address, value " +
             "FROM orders INNER JOIN code ON orders.code_id = code.id " +
             "WHERE orders.user_id = ? ORDER BY orders.id DESC LIMIT 1";
 
@@ -34,11 +34,12 @@ public class OrderMySQLDaoImpl implements OrderDao {
     public void add(Order order) {
         try (Connection connection = DBConnector.connect();
              PreparedStatement statement = connection.prepareStatement(ADD_ORDER)) {
-            statement.setLong(1, order.getUser().getId());
-            statement.setLong(2, order.getCode().getId());
-            statement.setString(3, order.getEmail());
-            statement.setString(4, order.getPhoneNumber());
-            statement.setString(5, order.getAddress());
+            statement.setLong(1, order.getBasketId());
+            statement.setLong(2, order.getUser().getId());
+            statement.setLong(3, order.getCode().getId());
+            statement.setString(4, order.getEmail());
+            statement.setString(5, order.getPhoneNumber());
+            statement.setString(6, order.getAddress());
             statement.execute();
             logger.info(order + " was added to DB");
         } catch (SQLException e) {
@@ -66,6 +67,7 @@ public class OrderMySQLDaoImpl implements OrderDao {
                         user);
                 Order order = new Order(
                         resultSet.getLong("id"),
+                        resultSet.getLong("basket_id"),
                         user,
                         code,
                         resultSet.getString("email"),
@@ -94,6 +96,7 @@ public class OrderMySQLDaoImpl implements OrderDao {
                         user);
                 Order order = new Order(
                         resultSet.getLong("id"),
+                        resultSet.getLong("basket_id"),
                         user,
                         code,
                         resultSet.getString("email"),

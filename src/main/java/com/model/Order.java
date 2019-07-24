@@ -5,6 +5,7 @@ import java.util.Objects;
 public class Order {
 
     private Long id;
+    private Long basketId;
     private User user;
     private Code code;
     private String email;
@@ -14,7 +15,9 @@ public class Order {
     public Order() {
     }
 
-    public Order(User user, Code code, String email, String phoneNumber, String address) {
+    public Order(Long basketId, User user, Code code,
+                 String email, String phoneNumber, String address) {
+        this.basketId = basketId;
         this.user = user;
         this.code = code;
         this.email = email;
@@ -22,8 +25,10 @@ public class Order {
         this.address = address;
     }
 
-    public Order(Long id, User user, Code code, String email, String phoneNumber, String address) {
+    public Order(Long id, Long basketId, User user, Code code,
+                 String email, String phoneNumber, String address) {
         this.id = id;
+        this.basketId = basketId;
         this.user = user;
         this.code = code;
         this.email = email;
@@ -37,6 +42,14 @@ public class Order {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getBasketId() {
+        return basketId;
+    }
+
+    public void setBasketId(Long basketId) {
+        this.basketId = basketId;
     }
 
     public User getUser() {
@@ -85,6 +98,7 @@ public class Order {
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
         return Objects.equals(id, order.id) &&
+                Objects.equals(basketId, order.basketId) &&
                 Objects.equals(user, order.user) &&
                 Objects.equals(code, order.code) &&
                 Objects.equals(email, order.email) &&
@@ -94,13 +108,14 @@ public class Order {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, code, email, phoneNumber, address);
+        return Objects.hash(id, basketId, user, code, email, phoneNumber, address);
     }
 
     @Override
     public String toString() {
         return "Order{" +
                 "id=" + id +
+                ", basketId=" + basketId +
                 ", user=" + user +
                 ", code=" + code +
                 ", email='" + email + '\'' +

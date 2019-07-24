@@ -2,12 +2,19 @@ package com.service.impl;
 
 import com.dao.BasketDao;
 import com.factory.BasketDaoFactory;
-import com.model.User;
+import com.model.Basket;
 import com.service.BasketService;
+
+import java.util.Optional;
 
 public class BasketServiceImpl implements BasketService {
 
     private static final BasketDao basketDao = BasketDaoFactory.getInstance();
+
+    @Override
+    public void add(Basket basket) {
+        basketDao.add(basket);
+    }
 
     @Override
     public void addProduct(Long userId, Long productId) {
@@ -20,7 +27,7 @@ public class BasketServiceImpl implements BasketService {
     }
 
     @Override
-    public void clean(User user) {
-        basketDao.clean(user);
+    public Optional<Basket> getBasketByUserId(Long userId) {
+        return basketDao.getBasketByUserId(userId);
     }
 }
