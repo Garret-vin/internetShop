@@ -4,6 +4,7 @@ package com.controller;
 import com.factory.UserServiceFactory;
 import com.model.User;
 import com.service.UserService;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,8 +26,10 @@ public class InitServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        User admin = new User("test", "test@test", "test", "admin");
-        User user = new User("user", "garret.ork@gmail.com", "user", "user");
+        String passwordTest = DigestUtils.sha256Hex("test");
+        String passwordUser = DigestUtils.sha256Hex("user");
+        User admin = new User("test", "test@test", passwordTest, "admin");
+        User user = new User("user", "garret.ork@gmail.com", passwordUser, "user");
         userService.add(admin);
         userService.add(user);
     }
