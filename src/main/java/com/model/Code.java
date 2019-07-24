@@ -10,6 +10,9 @@ public class Code {
     private String value;
     private User user;
 
+    public Code() {
+    }
+
     public Code(User user) {
         this.user = user;
         this.value = CodeGeneratorUtil.generate();
@@ -21,20 +24,28 @@ public class Code {
         this.value = value;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getId() {
-        return id;
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public User getUser() {
         return user;
     }
 
-    public String getValue() {
-        return value;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

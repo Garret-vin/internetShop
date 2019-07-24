@@ -11,8 +11,10 @@ public class Order {
     private String phoneNumber;
     private String address;
 
-    public Order(User user, Code code,
-                 String email, String phoneNumber, String address) {
+    public Order() {
+    }
+
+    public Order(User user, Code code, String email, String phoneNumber, String address) {
         this.user = user;
         this.code = code;
         this.email = email;
@@ -41,20 +43,40 @@ public class Order {
         return user;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Code getCode() {
         return code;
+    }
+
+    public void setCode(Code code) {
+        this.code = code;
     }
 
     public String getEmail() {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getAddress() {
         return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     @Override
