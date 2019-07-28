@@ -2,6 +2,7 @@ package com.dao.impl;
 
 import com.dao.OrderDao;
 import com.model.Order;
+import com.model.User;
 import com.utils.Database;
 import com.utils.IdGeneratorUtil;
 import org.apache.log4j.Logger;
@@ -24,5 +25,13 @@ public class OrderDaoImpl implements OrderDao {
         return Database.orders.stream()
                 .filter(order -> order.getId().equals(id))
                 .findFirst();
+    }
+
+    @Override
+    public Optional<Order> getLastOrderForUser(User user) {
+        return Database.orders
+                .stream()
+                .filter(order -> order.getUser().equals(user))
+                .min((o1, o2) -> (int) (o2.getId() - o1.getId()));
     }
 }

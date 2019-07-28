@@ -19,7 +19,7 @@ public class AddProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.getRequestDispatcher("/addProduct.jsp").forward(req, resp);
+        req.getRequestDispatcher("/add.jsp").forward(req, resp);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class AddProductServlet extends HttpServlet {
         }
 
         Product product = new Product(name, description, price);
-        productService.addProduct(product);
+        productService.add(product);
 
         req.setAttribute("productList", productService.getAll());
         req.getRequestDispatcher("/products_admin.jsp").forward(req, resp);

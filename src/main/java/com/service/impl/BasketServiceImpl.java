@@ -2,8 +2,7 @@ package com.service.impl;
 
 import com.dao.BasketDao;
 import com.factory.BasketDaoFactory;
-import com.model.Basket;
-import com.model.Product;
+import com.model.User;
 import com.service.BasketService;
 
 public class BasketServiceImpl implements BasketService {
@@ -11,12 +10,17 @@ public class BasketServiceImpl implements BasketService {
     private static final BasketDao basketDao = BasketDaoFactory.getInstance();
 
     @Override
-    public void add(Basket basket) {
-        basketDao.addBasket(basket);
+    public void addProduct(Long userId, Long productId) {
+        basketDao.addProduct(userId, productId);
     }
 
     @Override
-    public void addProduct(Basket basket, Product product) {
-        basketDao.addProduct(basket, product);
+    public int size(Long userId) {
+        return basketDao.size(userId);
+    }
+
+    @Override
+    public void clean(User user) {
+        basketDao.clean(user);
     }
 }

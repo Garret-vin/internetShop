@@ -10,15 +10,15 @@ public interface UserService {
 
     void add(User user);
 
-    void remove(Long id);
-
-    void update(User oldUser, User newUser);
-
-    Map<String, String> getMapLoginToEmail();
-
-    Optional<User> getByLogin(String login);
-
     List<User> getAll();
 
     Optional<User> getById(Long id);
+
+    Optional<User> getByLogin(String login);
+
+    Map<String, String> getMapLoginToEmail();
+
+    void update(User user);
+
+    void remove(Long id);
 }

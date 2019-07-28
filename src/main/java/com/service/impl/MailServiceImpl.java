@@ -44,7 +44,7 @@ public class MailServiceImpl implements MailService {
                     InternetAddress.parse(order.getEmail())
             );
             message.setSubject("Confirm password \"Online shop\"");
-            message.setText(order.getConfirmCode());
+            message.setText(order.getCode().getValue());
 
             Transport.send(message);
             logger.info("Message send succesfull to " + order.getUser());

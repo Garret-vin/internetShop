@@ -41,11 +41,13 @@ public class AddUserServlet extends HttpServlet {
             req.getRequestDispatcher("/addUser.jsp").forward(req, resp);
         } else if (loginToEmailMap.containsKey(login)
                 || loginToEmailMap.containsValue(email)) {
+            req.setAttribute("enteredLogin", login);
+            req.setAttribute("enteredEmail", email);
             req.setAttribute("error", "Пользователь с таким логином или " +
                     "электронной почтой уже зарегистрирован!");
             req.getRequestDispatcher("/addUser.jsp").forward(req, resp);
         } else if (password.equals(confirmPassword)) {
-            User user = new User(email, login, password, role);
+            User user = new User(login, email, password, role);
             userService.add(user);
             resp.sendRedirect("/admin/users");
         } else {

@@ -25,15 +25,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(User oldUser, User newUser) {
-        userDao.update(oldUser, newUser);
+    public void update(User user) {
+        userDao.update(user);
     }
 
     @Override
     public Map<String, String> getMapLoginToEmail() {
-        return userDao.getAll()
-                .stream()
-                .collect(Collectors.toMap(User::getLogin, User::getEmail));
+        return userDao.getMapLoginToEmail();
     }
 
     @Override

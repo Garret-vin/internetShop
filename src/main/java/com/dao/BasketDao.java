@@ -1,11 +1,12 @@
 package com.dao;
 
-import com.model.Basket;
-import com.model.Product;
+import com.model.User;
 
 public interface BasketDao {
 
-    void addBasket(Basket basket);
+    void addProduct(Long userId, Long productId);
 
-    void addProduct(Basket basket, Product product);
+    int size(Long userId);
+
+    void clean(User user);
 }
