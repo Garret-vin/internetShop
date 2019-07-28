@@ -18,5 +18,7 @@ ${message}
     Введите пароль<input type="text" name="confirm">
     <input type="submit" value="Отправить">
 </form>
+
+<button><a href="/user/products">На главную</a></button>
 </body>
 </html>

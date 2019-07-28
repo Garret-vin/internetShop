@@ -24,10 +24,10 @@ public class UserProductsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        Long userId = ((User) req.getSession().getAttribute("user")).getId();
-        Optional<Basket> optionalBasket = basketService.getBasketByUserId(userId);
+        User user = (User) req.getSession().getAttribute("user");
+        Optional<Basket> optionalBasket = basketService.getBasketByUser(user);
         optionalBasket.ifPresent(basket ->
-                req.setAttribute("size", basketService.size(basket.getId())));
+                req.setAttribute("size", basketService.size(basket)));
         req.setAttribute("productList", productService.getAll());
         req.getRequestDispatcher("/products_user.jsp").forward(req, resp);
     }

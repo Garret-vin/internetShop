@@ -1,6 +1,9 @@
 package com.dao.impl;
 
+import com.dao.BasketDao;
 import com.dao.OrderDao;
+import com.factory.BasketDaoFactory;
+import com.model.Basket;
 import com.model.Code;
 import com.model.Order;
 import com.model.User;
@@ -16,6 +19,7 @@ import java.util.Optional;
 public class OrderMySQLDaoImpl implements OrderDao {
 
     private static final Logger logger = Logger.getLogger(OrderMySQLDaoImpl.class);
+    private static final BasketDao basketDao = BasketDaoFactory.getInstance();
     private static final String ADD_ORDER = "INSERT INTO orders " +
             "(basket_id, user_id, code_id, email, phone_number, address) " +
             "VALUES (?, ?, ?, ?, ?, ?)";
@@ -34,7 +38,7 @@ public class OrderMySQLDaoImpl implements OrderDao {
     public void add(Order order) {
         try (Connection connection = DBConnector.connect();
              PreparedStatement statement = connection.prepareStatement(ADD_ORDER)) {
-            statement.setLong(1, order.getBasketId());
+            statement.setLong(1, order.getBasket().getId());
             statement.setLong(2, order.getUser().getId());
             statement.setLong(3, order.getCode().getId());
             statement.setString(4, order.getEmail());
@@ -61,13 +65,18 @@ public class OrderMySQLDaoImpl implements OrderDao {
                         resultSet.getString("email"),
                         resultSet.getString("password"),
                         resultSet.getString("role"));
+                Optional<Basket> optionalBasket = basketDao.getBasketByUser(user);
+                Basket basket = null;
+                if (optionalBasket.isPresent()) {
+                    basket = optionalBasket.get();
+                }
                 Code code = new Code(
                         resultSet.getLong("code_id"),
                         resultSet.getString("value"),
                         user);
                 Order order = new Order(
                         resultSet.getLong("id"),
-                        resultSet.getLong("basket_id"),
+                        basket,
                         user,
                         code,
                         resultSet.getString("email"),
@@ -90,13 +99,18 @@ public class OrderMySQLDaoImpl implements OrderDao {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
+                Optional<Basket> optionalBasket = basketDao.getBasketByUser(user);
+                Basket basket = null;
+                if (optionalBasket.isPresent()) {
+                    basket = optionalBasket.get();
+                }
                 Code code = new Code(
                         resultSet.getLong("code_id"),
                         resultSet.getString("value"),
                         user);
                 Order order = new Order(
                         resultSet.getLong("id"),
-                        resultSet.getLong("basket_id"),
+                        basket,
                         user,
                         code,
                         resultSet.getString("email"),

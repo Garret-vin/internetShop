@@ -40,7 +40,7 @@ public class PaymentConfirmServlet extends HttpServlet {
         if (optionalOrder.isPresent()) {
             order = optionalOrder.get();
             if (order.getCode().getValue().equals(confirm)) {
-                Basket basket = new Basket(user.getId(), Collections.emptyList());
+                Basket basket = new Basket(order.getUser(), Collections.emptyList());
                 basketService.add(basket);
                 req.setAttribute("message", "Покупка успешно совершена!");
             } else {

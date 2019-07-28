@@ -18,7 +18,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -41,9 +40,7 @@ public class PaymentServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        HttpSession session = req.getSession();
-
-        User user = (User) session.getAttribute("user");
+        User user = (User) req.getSession().getAttribute("user");
         String phoneNumber = req.getParameter("phone");
         String address = req.getParameter("address");
         String email = req.getParameter("email");
@@ -55,13 +52,13 @@ public class PaymentServlet extends HttpServlet {
             code = optionalCode.get();
         }
 
-        Long basketId = -1L;
-        Optional<Basket> optionalBasket = basketService.getBasketByUserId(user.getId());
+        Basket basket = null;
+        Optional<Basket> optionalBasket = basketService.getBasketByUser(user);
         if (optionalBasket.isPresent()) {
-            basketId = optionalBasket.get().getId();
+            basket = optionalBasket.get();
         }
 
-        Order order = new Order(basketId, user, code, email, phoneNumber, address);
+        Order order = new Order(basket, user, code, email, phoneNumber, address);
         orderService.add(order);
         new Thread(() -> mailService.sendConfirmCode(order)).start();
 

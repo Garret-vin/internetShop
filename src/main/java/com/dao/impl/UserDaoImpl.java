@@ -23,15 +23,9 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void remove(Long id) {
-        Optional<User> optionalUser = getById(id);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            Database.users.remove(user);
-            logger.info(user + " was deleted from database");
-        } else {
-            logger.warn("Can't delete user. Reason: user not found!");
-        }
+    public void remove(User user) {
+        Database.users.remove(user);
+        logger.info(user + " was deleted from database");
     }
 
     @Override

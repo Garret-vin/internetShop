@@ -3,6 +3,7 @@ package com.dao.impl;
 import com.dao.BasketDao;
 import com.model.Basket;
 import com.model.Product;
+import com.model.User;
 import com.utils.DBConnector;
 import org.apache.log4j.Logger;
 
@@ -18,11 +19,13 @@ public class BasketMySQLDaoImpl implements BasketDao {
 
     private static final Logger logger = Logger.getLogger(BasketMySQLDaoImpl.class);
     private static final String ADD_BASKET = "INSERT INTO basket (user_id) VALUE (?)";
+    private static final String GET_SIZE = "SELECT COUNT(*) FROM product_basket WHERE basket_id = ?";
     private static final String ADD_PRODUCT = "INSERT INTO product_basket (basket_id, product_id)" +
             " VALUES (?, ?)";
-    private static final String GET_SIZE = "SELECT COUNT(*) FROM product_basket WHERE basket_id = ?";
+
     private static final String GET_BASKET_BY_USER_ID = "SELECT id, user_id FROM basket " +
             "WHERE user_id = ? ORDER BY id DESC LIMIT 1";
+
     private static final String GET_PRODUCTS_FROM_BASKET = "SELECT products.id, name, description, price " +
             "FROM products INNER JOIN product_basket ON products.id = product_basket.product_id " +
             "WHERE basket_id = ?";
@@ -31,7 +34,7 @@ public class BasketMySQLDaoImpl implements BasketDao {
     public void add(Basket basket) {
         try (Connection connection = DBConnector.connect();
              PreparedStatement statement = connection.prepareStatement(ADD_BASKET)) {
-            statement.setLong(1, basket.getUserId());
+            statement.setLong(1, basket.getUser().getId());
             statement.execute();
             logger.info(basket + " was added to DB");
         } catch (SQLException e) {
@@ -40,24 +43,24 @@ public class BasketMySQLDaoImpl implements BasketDao {
     }
 
     @Override
-    public void addProduct(Long basketId, Long productId) {
+    public void addProduct(Basket basket, Product product) {
         try (Connection connection = DBConnector.connect();
              PreparedStatement statement = connection.prepareStatement(ADD_PRODUCT)) {
-            statement.setLong(1, basketId);
-            statement.setLong(2, productId);
+            statement.setLong(1, basket.getId());
+            statement.setLong(2, product.getId());
             statement.execute();
-            logger.info("Product was added to basket " + basketId);
+            logger.info(product + " was added to basket " + basket);
         } catch (SQLException e) {
             logger.error("Try to add product in basket failed!", e);
         }
     }
 
     @Override
-    public int size(Long basketId) {
+    public int size(Basket basket) {
         int count = 0;
         try (Connection connection = DBConnector.connect();
              PreparedStatement statement = connection.prepareStatement(GET_SIZE)) {
-            statement.setLong(1, basketId);
+            statement.setLong(1, basket.getId());
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 count = resultSet.getInt(1);
@@ -69,17 +72,17 @@ public class BasketMySQLDaoImpl implements BasketDao {
     }
 
     @Override
-    public Optional<Basket> getBasketByUserId(Long userId) {
+    public Optional<Basket> getBasketByUser(User user) {
         try (Connection connection = DBConnector.connect();
              PreparedStatement statement = connection.prepareStatement(GET_BASKET_BY_USER_ID)) {
-            statement.setLong(1, userId);
+            statement.setLong(1, user.getId());
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
                 List<Product> productList = getProductListByBasketId(resultSet.getLong("id"));
                 Basket basketFromDb = new Basket(
                         resultSet.getLong("id"),
-                        resultSet.getLong("user_id"),
+                        user,
                         productList);
                 return Optional.of(basketFromDb);
             }

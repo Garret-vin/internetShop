@@ -46,10 +46,10 @@ public class UserMySQLDaoImpl implements UserDao {
     }
 
     @Override
-    public void remove(Long id) {
+    public void remove(User user) {
         try (Connection connection = DBConnector.connect();
              PreparedStatement statement = connection.prepareStatement(DELETE_USER)) {
-            statement.setLong(1, id);
+            statement.setLong(1, user.getId());
             int rows = statement.executeUpdate();
             logger.info(rows + " row in table users was deleted");
         } catch (SQLException e) {

@@ -60,7 +60,7 @@ public class AddUserServlet extends HttpServlet {
 
             Optional<User> optionalUser = userService.getByLogin(login);
             if (optionalUser.isPresent()) {
-                Basket basket = new Basket(optionalUser.get().getId(), Collections.emptyList());
+                Basket basket = new Basket(optionalUser.get(), Collections.emptyList());
                 basketService.add(basket);
             }
             resp.sendRedirect("/admin/users");

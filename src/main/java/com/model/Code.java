@@ -2,12 +2,28 @@ package com.model;
 
 import com.utils.CodeGeneratorUtil;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.util.Objects;
 
+@Entity
+@Table(name = "code")
 public class Code {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(length = 10)
     private String value;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
     public Code() {

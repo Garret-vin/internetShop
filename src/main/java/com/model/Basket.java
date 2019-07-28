@@ -1,25 +1,47 @@
 package com.model;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "basket")
 public class Basket {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long userId;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private User user;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @JoinTable(name = "product_basket",
+            joinColumns = {@JoinColumn(name = "basket_id")},
+            inverseJoinColumns = {@JoinColumn(name = "product_id")})
     private List<Product> productList;
 
     public Basket() {
     }
 
-    public Basket(Long userId, List<Product> productList) {
-        this.userId = userId;
+    public Basket(User user, List<Product> productList) {
+        this.user = user;
         this.productList = productList;
     }
 
-    public Basket(Long id, Long userId, List<Product> productList) {
+    public Basket(Long id, User user, List<Product> productList) {
         this.id = id;
-        this.userId = userId;
+        this.user = user;
         this.productList = productList;
     }
 
@@ -31,12 +53,12 @@ public class Basket {
         this.id = id;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<Product> getProductList() {
@@ -53,20 +75,20 @@ public class Basket {
         if (o == null || getClass() != o.getClass()) return false;
         Basket basket = (Basket) o;
         return Objects.equals(id, basket.id) &&
-                Objects.equals(userId, basket.userId) &&
+                Objects.equals(user, basket.user) &&
                 Objects.equals(productList, basket.productList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, productList);
+        return Objects.hash(id, user, productList);
     }
 
     @Override
     public String toString() {
         return "Basket{" +
                 "id=" + id +
-                ", userId=" + userId +
+                ", user=" + user +
                 '}';
     }
 }

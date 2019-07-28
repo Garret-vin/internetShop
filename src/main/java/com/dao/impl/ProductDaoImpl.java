@@ -21,15 +21,9 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public void remove(Long id) {
-        Optional<Product> optionalProduct = getById(id);
-        if (optionalProduct.isPresent()) {
-            Product product = optionalProduct.get();
-            Database.products.remove(product);
-            logger.info(product + " was deleted from database");
-        } else {
-            logger.warn("Can't delete product. Reason: product not found!");
-        }
+    public void remove(Product product) {
+        Database.products.remove(product);
+        logger.info(product + " was deleted from database");
     }
 
     @Override

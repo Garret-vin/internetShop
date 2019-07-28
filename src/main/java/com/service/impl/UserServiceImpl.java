@@ -8,7 +8,6 @@ import com.service.UserService;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class UserServiceImpl implements UserService {
 
@@ -20,8 +19,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void remove(Long id) {
-        userDao.remove(id);
+    public void remove(User user) {
+        userDao.remove(user);
     }
 
     @Override
