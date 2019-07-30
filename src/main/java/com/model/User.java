@@ -5,23 +5,30 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", schema = "onlineshop")
+@PrimaryKeyJoinColumn(name = "id")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(unique = true, length = 50)
+    @Column(name = "login", unique = true, length = 50, nullable = false)
     private String login;
 
-    @Column(unique = true, length = 64)
+    @Column(name = "email", unique = true, length = 64, nullable = false)
     private String email;
+
+    @Column(name = "password", length = 255, nullable = false)
     private String password;
+
+    @Column(name = "role", length = 20, nullable = false)
     private String role;
 
     public User() {

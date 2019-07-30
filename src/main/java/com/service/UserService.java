@@ -3,7 +3,6 @@ package com.service;
 import com.model.User;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public interface UserService {
@@ -16,9 +15,9 @@ public interface UserService {
 
     Optional<User> getByLogin(String login);
 
-    Map<String, String> getMapLoginToEmail();
-
-    void update(User user);
+    void update(Long userId, User user);
 
     void remove(User user);
+
+    Optional<User> getByLoginOrEmail(String login, String email);
 }

@@ -1,6 +1,7 @@
 package com.model;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,19 +11,23 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "basket")
+@Table(name = "basket", schema = "onlineshop")
+@PrimaryKeyJoinColumn(name = "id")
 public class Basket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(targetEntity = User.class, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})

@@ -41,7 +41,7 @@ public class ChangeProductServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
-        Long id = Long.valueOf(req.getParameter("id"));
+        Long productId = Long.valueOf(req.getParameter("id"));
         String name = req.getParameter("name");
         String description = req.getParameter("description");
         String enteredPrice = req.getParameter("price");
@@ -58,8 +58,8 @@ public class ChangeProductServlet extends HttpServlet {
             req.setAttribute("oldPrice", price);
             req.getRequestDispatcher("/change_product.jsp").forward(req, resp);
         } else {
-            Product product = new Product(id, name, description, price);
-            productService.update(product);
+            Product product = new Product(name, description, price);
+            productService.update(productId, product);
             resp.sendRedirect("/admin/products");
         }
     }

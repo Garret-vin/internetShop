@@ -10,9 +10,7 @@ import org.hibernate.query.Query;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class UserHibDaoImpl implements UserDao {
 
@@ -55,12 +53,17 @@ public class UserHibDaoImpl implements UserDao {
     }
 
     @Override
-    public void update(User user) {
+    public void update(Long userId, User user) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
 
-            session.update(user);
+            User userFromDb = session.get(User.class, userId);
+            userFromDb.setLogin(user.getLogin());
+            userFromDb.setPassword(user.getPassword());
+            userFromDb.setEmail(user.getEmail());
+            userFromDb.setRole(user.getRole());
+            session.update(userFromDb);
 
             transaction.commit();
             logger.info("User with id = " + user.getId() + " was updated in DB");
@@ -89,18 +92,12 @@ public class UserHibDaoImpl implements UserDao {
             Query query = session.createQuery("from User where login = :login");
             query.setParameter("login", login);
             User user = (User) query.uniqueResult();
+
             return Optional.of(user);
         } catch (Exception e) {
             logger.error("Try to get user by login was failed!", e);
         }
         return Optional.empty();
-    }
-
-    @Override
-    public Map<String, String> getMapLoginToEmail() {
-        return getAll()
-                .stream()
-                .collect(Collectors.toMap(User::getLogin, User::getEmail));
     }
 
     @Override
@@ -113,5 +110,21 @@ public class UserHibDaoImpl implements UserDao {
             logger.error("Try to get all users was failed!", e);
         }
         return userList;
+    }
+
+    @Override
+    public Optional<User> getByLoginOrEmail(String login, String email) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query query = session.createQuery("from User where login = :login OR email = :email");
+            query.setParameter("login", login);
+            query.setParameter("email", email);
+            query.setMaxResults(1);
+            User user = (User) query.uniqueResult();
+
+            return Optional.of(user);
+        } catch (Exception e) {
+            logger.error("Try to get user by login OR email was failed!", e);
+        }
+        return Optional.empty();
     }
 }

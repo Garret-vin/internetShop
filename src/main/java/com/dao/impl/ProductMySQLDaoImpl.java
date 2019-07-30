@@ -52,13 +52,13 @@ public class ProductMySQLDaoImpl implements ProductDao {
     }
 
     @Override
-    public void update(Product product) {
+    public void update(Long productId, Product product) {
         try (Connection connection = DBConnector.connect();
              PreparedStatement statement = connection.prepareStatement(UPDATE_PRODUCT)) {
             statement.setString(1, product.getName());
             statement.setString(2, product.getDescription());
             statement.setDouble(3, product.getPrice());
-            statement.setLong(4, product.getId());
+            statement.setLong(4, productId);
             int columns = statement.executeUpdate();
             logger.info(columns + " columns was updated");
         } catch (SQLException e) {

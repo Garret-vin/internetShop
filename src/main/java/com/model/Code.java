@@ -8,22 +8,27 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "code")
+@Table(name = "code", schema = "onlineshop")
+@PrimaryKeyJoinColumn(name = "id")
 public class Code {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(length = 10)
+    @Column(name = "value", length = 10, nullable = false)
     private String value;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(targetEntity = User.class, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Code() {

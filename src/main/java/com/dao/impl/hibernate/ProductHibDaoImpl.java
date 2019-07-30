@@ -52,12 +52,16 @@ public class ProductHibDaoImpl implements ProductDao {
     }
 
     @Override
-    public void update(Product product) {
+    public void update(Long productId, Product product) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
 
-            session.update(product);
+            Product productFromDb = session.get(Product.class, productId);
+            productFromDb.setName(product.getName());
+            productFromDb.setDescription(product.getDescription());
+            productFromDb.setPrice(product.getPrice());
+            session.update(productFromDb);
 
             transaction.commit();
             logger.info("Product with id = " + product.getId() + " was updated in DB");

@@ -7,9 +7,7 @@ import com.utils.IdGeneratorUtil;
 import org.apache.log4j.Logger;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class UserDaoImpl implements UserDao {
 
@@ -29,8 +27,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void update(User user) {
-        Optional<User> oldUserOptional = getById(user.getId());
+    public void update(Long userId, User user) {
+        Optional<User> oldUserOptional = getById(userId);
         if (oldUserOptional.isPresent()) {
             User oldUser = oldUserOptional.get();
             oldUser.setLogin(user.getLogin());
@@ -58,14 +56,14 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Map<String, String> getMapLoginToEmail() {
-        return Database.users
-                .stream()
-                .collect(Collectors.toMap(User::getLogin, User::getEmail));
+    public List<User> getAll() {
+        return Database.users;
     }
 
     @Override
-    public List<User> getAll() {
-        return Database.users;
+    public Optional<User> getByLoginOrEmail(String login, String email) {
+        return Database.users.stream()
+                .filter(user -> user.getLogin().equals(login) || user.getEmail().equals(email))
+                .findFirst();
     }
 }

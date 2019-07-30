@@ -27,8 +27,8 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public void update(Product product) {
-        Optional<Product> optionalProduct = getById(product.getId());
+    public void update(Long productId, Product product) {
+        Optional<Product> optionalProduct = getById(productId);
         if (optionalProduct.isPresent()) {
             Product oldProduct = optionalProduct.get();
             oldProduct.setName(product.getName());

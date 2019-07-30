@@ -6,33 +6,41 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "orders", schema = "onlineshop")
+@PrimaryKeyJoinColumn(name = "id")
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @OneToOne(cascade = CascadeType.REFRESH)
+    @OneToOne(targetEntity = Basket.class, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "basket_id")
     private Basket basket;
 
-    @OneToOne(cascade = CascadeType.REFRESH)
+    @OneToOne(targetEntity = User.class, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(cascade = CascadeType.REFRESH)
+    @OneToOne(targetEntity = Code.class, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "code_id")
     private Code code;
 
-    @Column(length = 64)
+    @Column(name = "email", length = 64, nullable = false)
     private String email;
 
-    @Column(name = "phone_number", length = 20)
+    @Column(name = "phone_number", length = 20, nullable = false)
     private String phoneNumber;
 
+    @Column(name = "address", length = 60, nullable = false)
     private String address;
 
     public Order() {

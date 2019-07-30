@@ -13,7 +13,7 @@ public interface ProductService {
 
     Optional<Product> getById(Long id);
 
-    void update(Product product);
+    void update(Long productId, Product product);
 
     void remove(Product product);
 }
