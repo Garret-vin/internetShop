@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Optional;
 
 @WebServlet("/admin/add/user")
@@ -63,7 +62,7 @@ public class AddUserServlet extends HttpServlet {
 
             Optional<User> optionalNewUser = userService.getByLogin(login);
             if (optionalNewUser.isPresent()) {
-                Basket basket = new Basket(optionalNewUser.get(), Collections.emptyList());
+                Basket basket = new Basket(optionalNewUser.get());
                 basketService.add(basket);
             }
             resp.sendRedirect("/admin/users");

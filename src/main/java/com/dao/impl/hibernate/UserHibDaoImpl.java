@@ -21,9 +21,7 @@ public class UserHibDaoImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-
             session.save(user);
-
             transaction.commit();
             logger.info(user + " was added to DB");
         } catch (Exception e) {
@@ -39,9 +37,7 @@ public class UserHibDaoImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-
             session.delete(user);
-
             transaction.commit();
             logger.info(user + " was deleted from DB");
         } catch (Exception e) {
@@ -57,16 +53,14 @@ public class UserHibDaoImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-
             User userFromDb = session.get(User.class, userId);
             userFromDb.setLogin(user.getLogin());
             userFromDb.setPassword(user.getPassword());
             userFromDb.setEmail(user.getEmail());
             userFromDb.setRole(user.getRole());
             session.update(userFromDb);
-
             transaction.commit();
-            logger.info("User with id = " + user.getId() + " was updated in DB");
+            logger.info("User with id = " + userId + " was updated in DB");
         } catch (Exception e) {
             logger.error("Try to update user was failed!", e);
             if (transaction != null) {
@@ -92,7 +86,6 @@ public class UserHibDaoImpl implements UserDao {
             Query query = session.createQuery("from User where login = :login");
             query.setParameter("login", login);
             User user = (User) query.uniqueResult();
-
             return Optional.of(user);
         } catch (Exception e) {
             logger.error("Try to get user by login was failed!", e);
@@ -120,7 +113,6 @@ public class UserHibDaoImpl implements UserDao {
             query.setParameter("email", email);
             query.setMaxResults(1);
             User user = (User) query.uniqueResult();
-
             return Optional.of(user);
         } catch (Exception e) {
             logger.error("Try to get user by login OR email was failed!", e);

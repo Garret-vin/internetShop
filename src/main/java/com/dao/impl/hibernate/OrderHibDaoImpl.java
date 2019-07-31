@@ -20,9 +20,7 @@ public class OrderHibDaoImpl implements OrderDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-
             session.save(order);
-
             transaction.commit();
             logger.info(order + " was added to DB");
         } catch (Exception e) {
@@ -50,7 +48,6 @@ public class OrderHibDaoImpl implements OrderDao {
             Query query = session.createQuery("from Order where user = :user order by id desc");
             query.setParameter("user", user);
             query.setMaxResults(1);
-
             Order order = (Order) query.uniqueResult();
             return Optional.of(order);
         } catch (Exception e) {

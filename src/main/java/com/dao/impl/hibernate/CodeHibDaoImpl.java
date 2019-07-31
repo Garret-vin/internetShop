@@ -20,9 +20,7 @@ public class CodeHibDaoImpl implements CodeDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-
             session.save(code);
-
             transaction.commit();
             logger.info(code + " was added to DB");
         } catch (Exception e) {
@@ -50,7 +48,6 @@ public class CodeHibDaoImpl implements CodeDao {
             Query query = session.createQuery("from Code where user = :user order by id desc ");
             query.setParameter("user", user);
             query.setMaxResults(1);
-
             Code code = (Code) query.uniqueResult();
             return Optional.of(code);
         } catch (Exception e) {

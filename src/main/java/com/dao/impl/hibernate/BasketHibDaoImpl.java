@@ -21,9 +21,7 @@ public class BasketHibDaoImpl implements BasketDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-
             session.save(basket);
-
             transaction.commit();
             logger.info(basket + " was added to DB");
         } catch (Exception e) {
@@ -39,10 +37,8 @@ public class BasketHibDaoImpl implements BasketDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-
             basket.getProductList().add(product);
             session.update(basket);
-
             transaction.commit();
             logger.info("Added " + product + " in basket " + basket);
         } catch (Exception e) {
@@ -64,7 +60,6 @@ public class BasketHibDaoImpl implements BasketDao {
             Query query = session.createQuery("from Basket where user = :user order by id desc");
             query.setParameter("user", user);
             query.setMaxResults(1);
-
             Basket basket = (Basket) query.uniqueResult();
             return Optional.of(basket);
         } catch (Exception e) {

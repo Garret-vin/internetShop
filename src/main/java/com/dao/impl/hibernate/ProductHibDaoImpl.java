@@ -20,9 +20,7 @@ public class ProductHibDaoImpl implements ProductDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-
             session.save(product);
-
             transaction.commit();
             logger.info(product + " was added to DB");
         } catch (Exception e) {
@@ -38,9 +36,7 @@ public class ProductHibDaoImpl implements ProductDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-
             session.delete(product);
-
             transaction.commit();
             logger.info(product + " was deleted from DB");
         } catch (Exception e) {
@@ -56,15 +52,13 @@ public class ProductHibDaoImpl implements ProductDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-
             Product productFromDb = session.get(Product.class, productId);
             productFromDb.setName(product.getName());
             productFromDb.setDescription(product.getDescription());
             productFromDb.setPrice(product.getPrice());
             session.update(productFromDb);
-
             transaction.commit();
-            logger.info("Product with id = " + product.getId() + " was updated in DB");
+            logger.info("Product with id = " + productId + " was updated in DB");
         } catch (Exception e) {
             logger.error("Try to update user was failed!", e);
             if (transaction != null) {

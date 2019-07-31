@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
 
 @WebServlet(value = "/", loadOnStartup = 1)
 public class InitServlet extends HttpServlet {
@@ -41,7 +40,7 @@ public class InitServlet extends HttpServlet {
         userService.add(admin);
         userService.add(user);
 
-        Basket basket = new Basket(user, Collections.emptyList());
+        Basket basket = new Basket(user);
         basketService.add(basket);
 
         Product product = new Product("baton", "black", 12.34);

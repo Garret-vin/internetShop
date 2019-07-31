@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Optional;
 
 @WebServlet("/payment/confirm")
@@ -35,12 +34,11 @@ public class PaymentConfirmServlet extends HttpServlet {
         String confirm = req.getParameter("confirm");
         User user = (User) req.getSession().getAttribute("user");
 
-        Order order = null;
         Optional<Order> optionalOrder = orderService.getLastOrderForUser(user);
         if (optionalOrder.isPresent()) {
-            order = optionalOrder.get();
+            Order order = optionalOrder.get();
             if (order.getCode().getValue().equals(confirm)) {
-                Basket basket = new Basket(order.getUser(), Collections.emptyList());
+                Basket basket = new Basket(order.getUser());
                 basketService.add(basket);
                 req.setAttribute("message", "Покупка успешно совершена!");
             } else {

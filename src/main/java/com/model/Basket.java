@@ -13,6 +13,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,9 +40,9 @@ public class Basket {
     public Basket() {
     }
 
-    public Basket(User user, List<Product> productList) {
+    public Basket(User user) {
         this.user = user;
-        this.productList = productList;
+        this.productList = new ArrayList<>();
     }
 
     public Basket(Long id, User user, List<Product> productList) {
