@@ -15,5 +15,6 @@ public class HashUtilTest {
         String expectedResult = DigestUtils.sha256Hex(start + testPassword + end);
         String result = HashUtil.getSaltedPassword("1", array);
         Assert.assertEquals(expectedResult, result);
+        Assert.assertNotNull("Result is null", result);
     }
 }
