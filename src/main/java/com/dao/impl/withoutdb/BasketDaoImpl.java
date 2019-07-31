@@ -1,4 +1,4 @@
-package com.dao.impl;
+package com.dao.impl.withoutdb;
 
 import com.dao.BasketDao;
 import com.model.Basket;

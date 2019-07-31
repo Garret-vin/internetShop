@@ -1,4 +1,4 @@
-package com.dao.impl;
+package com.dao.impl.mysql;
 
 import com.dao.BasketDao;
 import com.dao.OrderDao;

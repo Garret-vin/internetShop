@@ -1,4 +1,4 @@
-package com.dao.impl;
+package com.dao.impl.mysql;
 
 import com.dao.CodeDao;
 import com.model.Code;

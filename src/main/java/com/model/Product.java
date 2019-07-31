@@ -33,7 +33,7 @@ public class Product {
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "productList",
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "productList",
             cascade = {CascadeType.MERGE})
     private List<Basket> basketList = new ArrayList<>();
 
