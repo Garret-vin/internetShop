@@ -3,6 +3,7 @@ package com.dao.impl.mysql;
 import com.dao.UserDao;
 import com.model.User;
 import com.utils.DBConnector;
+import com.utils.HashUtil;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
@@ -32,6 +33,7 @@ public class UserMySQLDaoImpl implements UserDao {
     public void add(User user) {
         try (Connection connection = DBConnector.connect();
              PreparedStatement statement = connection.prepareStatement(ADD_USER)) {
+            HashUtil.saltPassword(user);
             statement.setString(1, user.getLogin());
             statement.setString(2, user.getEmail());
             statement.setString(3, user.getPassword());
@@ -60,6 +62,7 @@ public class UserMySQLDaoImpl implements UserDao {
     public void update(Long userId, User user) {
         try (Connection connection = DBConnector.connect();
              PreparedStatement statement = connection.prepareStatement(UPDATE_USER)) {
+            HashUtil.saltPassword(user);
             statement.setString(1, user.getLogin());
             statement.setString(2, user.getEmail());
             statement.setString(3, user.getPassword());

@@ -6,7 +6,6 @@ import com.model.Basket;
 import com.model.User;
 import com.service.BasketService;
 import com.service.UserService;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -56,8 +55,7 @@ public class AddUserServlet extends HttpServlet {
             req.setAttribute("enteredEmail", email);
             req.getRequestDispatcher("/addUser.jsp").forward(req, resp);
         } else {
-            String encryptedPassword = DigestUtils.sha256Hex(password);
-            User user = new User(login, email, encryptedPassword, role);
+            User user = new User(login, email, password, role);
             userService.add(user);
 
             Optional<User> optionalNewUser = userService.getByLogin(login);

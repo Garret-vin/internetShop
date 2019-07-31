@@ -2,6 +2,7 @@ package com.dao.impl.hibernate;
 
 import com.dao.UserDao;
 import com.model.User;
+import com.utils.HashUtil;
 import com.utils.HibernateUtil;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
@@ -21,6 +22,7 @@ public class UserHibDaoImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
+            HashUtil.saltPassword(user);
             session.save(user);
             transaction.commit();
             logger.info(user + " was added to DB");
@@ -53,6 +55,7 @@ public class UserHibDaoImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
+            HashUtil.saltPassword(user);
             User userFromDb = session.get(User.class, userId);
             userFromDb.setLogin(user.getLogin());
             userFromDb.setPassword(user.getPassword());

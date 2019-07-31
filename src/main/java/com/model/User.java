@@ -31,6 +31,9 @@ public class User {
     @Column(name = "role", length = 20, nullable = false)
     private String role;
 
+    @Column(name = "salt", nullable = false)
+    private byte[] salt;
+
     public User() {
     }
 
@@ -87,6 +90,14 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public byte[] getSalt() {
+        return salt;
+    }
+
+    public void setSalt(byte[] salt) {
+        this.salt = salt;
     }
 
     @Override
