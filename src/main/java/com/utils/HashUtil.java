@@ -1,43 +1,37 @@
 package com.utils;
 
 import com.model.User;
-import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.log4j.Logger;
 
-import java.util.Random;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 public class HashUtil {
 
-    private static final int SALT_SIZE = 6;
+    private static final Logger logger = Logger.getLogger(HashUtil.class);
 
     public static void saltPassword(User user) {
-        byte[] salt = generateSalt();
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
         String saltedPassword = getSaltedPassword(user.getPassword(), salt);
         user.setSalt(salt);
         user.setPassword(saltedPassword);
     }
 
-    private static byte[] generateSalt() {
-        byte[] salt = new byte[SALT_SIZE];
-        for (int i = 0; i < SALT_SIZE; i++) {
-            salt[i] = (byte) new Random().nextInt(10);
-        }
-        return salt;
-    }
-
-
     public static String getSaltedPassword(String password, byte[] salt) {
-        String start = "";
-        String end = "";
-        for (int i = 0; i < SALT_SIZE / 2; i++) {
-            start += salt[i];
+        StringBuilder hashPassword = new StringBuilder();
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.update(salt);
+            byte[] hashBytes = messageDigest.digest(password.getBytes());
+            for (byte b : hashBytes) {
+                hashPassword.append(String.format("%02x", b));
+            }
+        } catch (NoSuchAlgorithmException e) {
+            logger.error("Can't find algorithm for hashing", e);
         }
-        for (int i = SALT_SIZE / 2; i < SALT_SIZE; i++) {
-            end += salt[i];
-        }
-        start = DigestUtils.sha256Hex(start);
-        end = DigestUtils.sha256Hex(end);
-        String encryptedPassword = DigestUtils.sha256Hex(password);
-        return DigestUtils.sha256Hex(
-                start + encryptedPassword + end);
+        return hashPassword.toString();
     }
 }

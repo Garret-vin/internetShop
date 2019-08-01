@@ -60,13 +60,6 @@
             <version>5.4.2.Final</version>
         </dependency>
 
-        <!--Sha256 hashing-->
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.11</version>
-        </dependency>
-
         <!--JUint-->
         <dependency>
             <groupId>junit</groupId>
