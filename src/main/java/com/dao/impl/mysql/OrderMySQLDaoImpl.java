@@ -25,7 +25,7 @@ public class OrderMySQLDaoImpl implements OrderDao {
             "VALUES (?, ?, ?, ?, ?, ?)";
 
     private static final String GET_BY_ID = "SELECT orders.id, basket_id, orders.user_id, code_id, " +
-            "orders.email, phone_number, address, login, password, role, value " +
+            "orders.email, phone_number, address, login, password, role, salt, value " +
             "FROM orders INNER JOIN users ON orders.user_id = users.id " +
             "INNER JOIN code ON orders.code_id = code.id WHERE orders.id = ?";
 
@@ -64,7 +64,8 @@ public class OrderMySQLDaoImpl implements OrderDao {
                         resultSet.getString("login"),
                         resultSet.getString("email"),
                         resultSet.getString("password"),
-                        resultSet.getString("role"));
+                        resultSet.getString("role"),
+                        resultSet.getBytes("salt"));
                 Optional<Basket> optionalBasket = basketDao.getBasketByUser(user);
                 Basket basket = null;
                 if (optionalBasket.isPresent()) {

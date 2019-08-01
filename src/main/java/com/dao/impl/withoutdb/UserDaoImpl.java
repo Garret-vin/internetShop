@@ -16,8 +16,9 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void add(User user) {
+        String saltedPassword = HashUtil.getSaltedPassword(user.getPassword(), user.getSalt());
+        user.setPassword(saltedPassword);
         user.setId(IdGeneratorUtil.getUserId());
-        HashUtil.saltPassword(user);
         Database.users.add(user);
         logger.info("User " + user + " was added in system.");
     }
@@ -32,11 +33,11 @@ public class UserDaoImpl implements UserDao {
     public void update(Long userId, User user) {
         Optional<User> oldUserOptional = getById(userId);
         if (oldUserOptional.isPresent()) {
-            HashUtil.saltPassword(user);
+            String saltedPassword = HashUtil.getSaltedPassword(user.getPassword(), user.getSalt());
             User oldUser = oldUserOptional.get();
             oldUser.setLogin(user.getLogin());
             oldUser.setEmail(user.getEmail());
-            oldUser.setPassword(user.getPassword());
+            oldUser.setPassword(saltedPassword);
             oldUser.setRole(user.getRole());
             logger.info(oldUser + " was updated");
         } else {

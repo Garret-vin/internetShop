@@ -33,10 +33,10 @@ public class UserMySQLDaoImpl implements UserDao {
     public void add(User user) {
         try (Connection connection = DBConnector.connect();
              PreparedStatement statement = connection.prepareStatement(ADD_USER)) {
-            HashUtil.saltPassword(user);
+            String saltedPassword = HashUtil.getSaltedPassword(user.getPassword(), user.getSalt());
             statement.setString(1, user.getLogin());
             statement.setString(2, user.getEmail());
-            statement.setString(3, user.getPassword());
+            statement.setString(3, saltedPassword);
             statement.setString(4, user.getRole());
             statement.execute();
 
@@ -62,10 +62,10 @@ public class UserMySQLDaoImpl implements UserDao {
     public void update(Long userId, User user) {
         try (Connection connection = DBConnector.connect();
              PreparedStatement statement = connection.prepareStatement(UPDATE_USER)) {
-            HashUtil.saltPassword(user);
+            String saltedPassword = HashUtil.getSaltedPassword(user.getPassword(), user.getSalt());
             statement.setString(1, user.getLogin());
             statement.setString(2, user.getEmail());
-            statement.setString(3, user.getPassword());
+            statement.setString(3, saltedPassword);
             statement.setString(4, user.getRole());
             statement.setLong(5, userId);
             int columns = statement.executeUpdate();
@@ -88,7 +88,8 @@ public class UserMySQLDaoImpl implements UserDao {
                         resultSet.getString("login"),
                         resultSet.getString("email"),
                         resultSet.getString("password"),
-                        resultSet.getString("role"));
+                        resultSet.getString("role"),
+                        resultSet.getBytes("salt"));
                 return Optional.of(userFromDb);
             }
         } catch (SQLException e) {
@@ -110,7 +111,8 @@ public class UserMySQLDaoImpl implements UserDao {
                         resultSet.getString("login"),
                         resultSet.getString("email"),
                         resultSet.getString("password"),
-                        resultSet.getString("role"));
+                        resultSet.getString("role"),
+                        resultSet.getBytes("salt"));
                 return Optional.of(userFromDb);
             }
         } catch (SQLException e) {
@@ -132,7 +134,8 @@ public class UserMySQLDaoImpl implements UserDao {
                         resultSet.getString("login"),
                         resultSet.getString("email"),
                         resultSet.getString("password"),
-                        resultSet.getString("role"));
+                        resultSet.getString("role"),
+                        resultSet.getBytes("salt"));
                 userList.add(userFromDb);
             }
         } catch (SQLException e) {
@@ -155,7 +158,8 @@ public class UserMySQLDaoImpl implements UserDao {
                         resultSet.getString("login"),
                         resultSet.getString("email"),
                         resultSet.getString("password"),
-                        resultSet.getString("role"));
+                        resultSet.getString("role"),
+                        resultSet.getBytes("salt"));
                 return Optional.of(userFromDb);
             }
         } catch (SQLException e) {

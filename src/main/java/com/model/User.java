@@ -1,5 +1,7 @@
 package com.model;
 
+import com.utils.HashUtil;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,12 +39,13 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String login, String email, String password, String role) {
+    public User(Long id, String login, String email, String password, String role, byte[] salt) {
         this.id = id;
         this.login = login;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.salt = salt;
     }
 
     public User(String login, String email, String password, String role) {
@@ -50,6 +53,7 @@ public class User {
         this.login = login;
         this.password = password;
         this.role = role;
+        this.salt = HashUtil.getRandomSalt();
     }
 
     public Long getId() {

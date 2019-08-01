@@ -27,7 +27,7 @@ public class Code {
     @Column(name = "value", length = 10, nullable = false)
     private String value;
 
-    @OneToOne(targetEntity = User.class, cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
     private User user;
 

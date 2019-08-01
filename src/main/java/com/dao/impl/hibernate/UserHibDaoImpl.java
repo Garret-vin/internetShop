@@ -22,7 +22,8 @@ public class UserHibDaoImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            HashUtil.saltPassword(user);
+            String saltedPassword = HashUtil.getSaltedPassword(user.getPassword(), user.getSalt());
+            user.setPassword(saltedPassword);
             session.save(user);
             transaction.commit();
             logger.info(user + " was added to DB");
@@ -55,10 +56,10 @@ public class UserHibDaoImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            HashUtil.saltPassword(user);
+            String saltedPassword = HashUtil.getSaltedPassword(user.getPassword(), user.getSalt());
             User userFromDb = session.get(User.class, userId);
             userFromDb.setLogin(user.getLogin());
-            userFromDb.setPassword(user.getPassword());
+            userFromDb.setPassword(saltedPassword);
             userFromDb.setEmail(user.getEmail());
             userFromDb.setRole(user.getRole());
             session.update(userFromDb);

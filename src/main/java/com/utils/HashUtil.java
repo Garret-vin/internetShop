@@ -1,6 +1,5 @@
 package com.utils;
 
-import com.model.User;
 import org.apache.log4j.Logger;
 
 import java.security.MessageDigest;
@@ -11,16 +10,18 @@ public class HashUtil {
 
     private static final Logger logger = Logger.getLogger(HashUtil.class);
 
-    public static void saltPassword(User user) {
+    public static byte[] getRandomSalt() {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
         random.nextBytes(salt);
-        String saltedPassword = getSaltedPassword(user.getPassword(), salt);
-        user.setSalt(salt);
-        user.setPassword(saltedPassword);
+        return salt;
     }
 
     public static String getSaltedPassword(String password, byte[] salt) {
+        if (password == null || password.isEmpty() || salt == null || isEmpty(salt)) {
+            logger.error("Empty arguments when trying to get salted password!");
+            throw new IllegalArgumentException("Arguments can not be empty");
+        }
         StringBuilder hashPassword = new StringBuilder();
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
@@ -33,5 +34,16 @@ public class HashUtil {
             logger.error("Can't find algorithm for hashing", e);
         }
         return hashPassword.toString();
+    }
+
+    private static boolean isEmpty(byte[] salt) {
+        boolean empty = true;
+        for (byte element : salt) {
+            if (element != 0) {
+                empty = false;
+                break;
+            }
+        }
+        return empty;
     }
 }

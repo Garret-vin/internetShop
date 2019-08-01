@@ -27,7 +27,7 @@ public class Basket {
     @Column(name = "id")
     private Long id;
 
-    @OneToOne(targetEntity = User.class, cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
     private User user;
 
