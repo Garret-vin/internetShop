@@ -3,7 +3,6 @@ package com.controller;
 import com.factory.UserServiceFactory;
 import com.model.User;
 import com.service.UserService;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -61,10 +60,16 @@ public class ChangeUserServlet extends HttpServlet {
             req.setAttribute("enteredEmail", email);
             req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
         } else {
-            String encryptedPassword = DigestUtils.sha256Hex(password);
-            User user = new User(login, email, encryptedPassword, role);
-            userService.update(id, user);
-            resp.sendRedirect("/admin/users");
+            Optional<User> optionalUser = userService.getById(id);
+            if (optionalUser.isPresent()) {
+                User userFromDb = optionalUser.get();
+                userFromDb.setLogin(login);
+                userFromDb.setPassword(password);
+                userFromDb.setEmail(email);
+                userFromDb.setRole(role);
+                userService.update(userFromDb);
+                resp.sendRedirect("/admin/users");
+            }
         }
     }
 }

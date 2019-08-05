@@ -3,6 +3,7 @@ package com.dao.impl.withoutdb;
 import com.dao.UserDao;
 import com.model.User;
 import com.utils.Database;
+import com.utils.HashUtil;
 import com.utils.IdGeneratorUtil;
 import org.apache.log4j.Logger;
 
@@ -15,6 +16,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void add(User user) {
+        String saltedPassword = HashUtil.getSaltedPassword(user.getPassword(), user.getSalt());
+        user.setPassword(saltedPassword);
         user.setId(IdGeneratorUtil.getUserId());
         Database.users.add(user);
         logger.info("User " + user + " was added in system.");
@@ -27,13 +30,14 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void update(Long userId, User user) {
-        Optional<User> oldUserOptional = getById(userId);
+    public void update(User user) {
+        Optional<User> oldUserOptional = getById(user.getId());
         if (oldUserOptional.isPresent()) {
+            String saltedPassword = HashUtil.getSaltedPassword(user.getPassword(), user.getSalt());
             User oldUser = oldUserOptional.get();
             oldUser.setLogin(user.getLogin());
             oldUser.setEmail(user.getEmail());
-            oldUser.setPassword(user.getPassword());
+            oldUser.setPassword(saltedPassword);
             oldUser.setRole(user.getRole());
             logger.info(oldUser + " was updated");
         } else {

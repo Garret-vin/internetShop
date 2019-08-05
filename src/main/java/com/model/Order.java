@@ -22,15 +22,15 @@ public class Order {
     @Column(name = "id")
     private Long id;
 
-    @OneToOne(targetEntity = Basket.class, cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "basket_id")
     private Basket basket;
 
-    @OneToOne(targetEntity = User.class, cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(targetEntity = Code.class, cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "code_id")
     private Code code;
 

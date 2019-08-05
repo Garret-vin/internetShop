@@ -2,6 +2,7 @@ package com.dao.impl.hibernate;
 
 import com.dao.UserDao;
 import com.model.User;
+import com.utils.HashUtil;
 import com.utils.HibernateUtil;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
@@ -21,6 +22,8 @@ public class UserHibDaoImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
+            String saltedPassword = HashUtil.getSaltedPassword(user.getPassword(), user.getSalt());
+            user.setPassword(saltedPassword);
             session.save(user);
             transaction.commit();
             logger.info(user + " was added to DB");
@@ -49,18 +52,15 @@ public class UserHibDaoImpl implements UserDao {
     }
 
     @Override
-    public void update(Long userId, User user) {
+    public void update(User user) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            User userFromDb = session.get(User.class, userId);
-            userFromDb.setLogin(user.getLogin());
-            userFromDb.setPassword(user.getPassword());
-            userFromDb.setEmail(user.getEmail());
-            userFromDb.setRole(user.getRole());
-            session.update(userFromDb);
+            String saltedPassword = HashUtil.getSaltedPassword(user.getPassword(), user.getSalt());
+            user.setPassword(saltedPassword);
+            session.update(user);
             transaction.commit();
-            logger.info("User with id = " + userId + " was updated in DB");
+            logger.info(user + " was updated in DB");
         } catch (Exception e) {
             logger.error("Try to update user was failed!", e);
             if (transaction != null) {

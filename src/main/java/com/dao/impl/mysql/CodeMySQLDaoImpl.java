@@ -16,8 +16,9 @@ public class CodeMySQLDaoImpl implements CodeDao {
 
     private static final Logger logger = Logger.getLogger(CodeMySQLDaoImpl.class);
     private static final String ADD_CODE = "INSERT INTO code (user_id, value) VALUES (?, ?)";
-    private static final String GET_BY_ID = "SELECT code.id, user_id, value, login, email, password, role " +
-            "FROM code INNER JOIN users ON code.user_id = users.id WHERE code.id = ?";
+    private static final String GET_BY_ID = "SELECT code.id, user_id, value, login, " +
+            "email, password, role, salt FROM code INNER JOIN users ON code.user_id = users.id " +
+            "WHERE code.id = ?";
 
     private static final String GET_LAST_CODE = "SELECT * FROM code WHERE user_id = ? " +
             "ORDER BY id DESC LIMIT 1";
@@ -48,7 +49,8 @@ public class CodeMySQLDaoImpl implements CodeDao {
                         resultSet.getString("login"),
                         resultSet.getString("email"),
                         resultSet.getString("password"),
-                        resultSet.getString("role"));
+                        resultSet.getString("role"),
+                        resultSet.getBytes("salt"));
                 Code code = new Code(
                         resultSet.getLong("id"),
                         resultSet.getString("value"),
