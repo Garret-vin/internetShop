@@ -52,19 +52,15 @@ public class UserHibDaoImpl implements UserDao {
     }
 
     @Override
-    public void update(Long userId, User user) {
+    public void update(User user) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             String saltedPassword = HashUtil.getSaltedPassword(user.getPassword(), user.getSalt());
-            User userFromDb = session.get(User.class, userId);
-            userFromDb.setLogin(user.getLogin());
-            userFromDb.setPassword(saltedPassword);
-            userFromDb.setEmail(user.getEmail());
-            userFromDb.setRole(user.getRole());
-            session.update(userFromDb);
+            user.setPassword(saltedPassword);
+            session.update(user);
             transaction.commit();
-            logger.info("User with id = " + userId + " was updated in DB");
+            logger.info(user + " was updated in DB");
         } catch (Exception e) {
             logger.error("Try to update user was failed!", e);
             if (transaction != null) {

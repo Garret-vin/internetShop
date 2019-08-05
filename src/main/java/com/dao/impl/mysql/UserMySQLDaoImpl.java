@@ -59,7 +59,7 @@ public class UserMySQLDaoImpl implements UserDao {
     }
 
     @Override
-    public void update(Long userId, User user) {
+    public void update(User user) {
         try (Connection connection = DBConnector.connect();
              PreparedStatement statement = connection.prepareStatement(UPDATE_USER)) {
             String saltedPassword = HashUtil.getSaltedPassword(user.getPassword(), user.getSalt());
@@ -67,7 +67,7 @@ public class UserMySQLDaoImpl implements UserDao {
             statement.setString(2, user.getEmail());
             statement.setString(3, saltedPassword);
             statement.setString(4, user.getRole());
-            statement.setLong(5, userId);
+            statement.setLong(5, user.getId());
             int columns = statement.executeUpdate();
             logger.info(columns + " columns was updated");
         } catch (SQLException e) {

@@ -12,7 +12,7 @@ public class HashUtilTest {
         byte[] salt = {0, 1, 2, 3, 4, 5};
         String result = HashUtil.getSaltedPassword(PASSWORD, salt);
         String expectedResult = "52985c24a33dc01d8065a9ce07acde5fc87509d5e28fb276513d2186ff2cceb5";
-        Assert.assertNotNull("Result is null", result);
+        Assert.assertNotNull("Result can not be null!", result);
         Assert.assertEquals(expectedResult, result);
     }
 

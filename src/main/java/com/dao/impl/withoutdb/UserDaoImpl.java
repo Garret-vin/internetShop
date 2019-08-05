@@ -30,8 +30,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void update(Long userId, User user) {
-        Optional<User> oldUserOptional = getById(userId);
+    public void update(User user) {
+        Optional<User> oldUserOptional = getById(user.getId());
         if (oldUserOptional.isPresent()) {
             String saltedPassword = HashUtil.getSaltedPassword(user.getPassword(), user.getSalt());
             User oldUser = oldUserOptional.get();

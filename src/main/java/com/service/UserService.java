@@ -15,7 +15,7 @@ public interface UserService {
 
     Optional<User> getByLogin(String login);
 
-    void update(Long userId, User user);
+    void update(User user);
 
     void remove(User user);
 

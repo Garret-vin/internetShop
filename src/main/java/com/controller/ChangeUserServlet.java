@@ -60,9 +60,16 @@ public class ChangeUserServlet extends HttpServlet {
             req.setAttribute("enteredEmail", email);
             req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
         } else {
-            User user = new User(login, email, password, role);
-            userService.update(id, user);
-            resp.sendRedirect("/admin/users");
+            Optional<User> optionalUser = userService.getById(id);
+            if (optionalUser.isPresent()) {
+                User userFromDb = optionalUser.get();
+                userFromDb.setLogin(login);
+                userFromDb.setPassword(password);
+                userFromDb.setEmail(email);
+                userFromDb.setRole(role);
+                userService.update(userFromDb);
+                resp.sendRedirect("/admin/users");
+            }
         }
     }
 }

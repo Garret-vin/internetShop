@@ -29,6 +29,7 @@ public class AddProductServlet extends HttpServlet {
         String name = req.getParameter("name");
         String description = req.getParameter("description");
         String enteredPrice = req.getParameter("price");
+
         Double price = 0.0;
         if (enteredPrice != null && !enteredPrice.equals("")) {
             price = Double.valueOf(enteredPrice);
