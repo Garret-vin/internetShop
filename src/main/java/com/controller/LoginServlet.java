@@ -3,6 +3,7 @@ package com.controller;
 import com.factory.UserServiceFactory;
 import com.model.User;
 import com.service.UserService;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,7 +30,7 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String login = req.getParameter("login");
-        String password = req.getParameter("password");
+        String encryptedPassword = DigestUtils.sha256Hex(req.getParameter("password"));
 
         User registeredUser = null;
         Optional<User> optionalUser = userService.getByLogin(login);
@@ -37,7 +38,7 @@ public class LoginServlet extends HttpServlet {
             registeredUser = optionalUser.get();
         }
 
-        if (registeredUser != null && registeredUser.getPassword().equals(password)) {
+        if (registeredUser != null && registeredUser.getPassword().equals(encryptedPassword)) {
             HttpSession session = req.getSession();
             session.setAttribute("user", registeredUser);
             if ("admin".equals(registeredUser.getRole())) {

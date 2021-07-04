@@ -9,7 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -122,8 +121,8 @@ public class UserMySQLDaoImpl implements UserDao {
     public Map<String, String> getMapLoginToEmail() {
         Map<String, String> loginToEmailMap = new HashMap<>();
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(GET_LOGIN_TO_EMAIL);
+             PreparedStatement statement = connection.prepareStatement(GET_LOGIN_TO_EMAIL)) {
+            ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
                 loginToEmailMap.put(
@@ -140,8 +139,8 @@ public class UserMySQLDaoImpl implements UserDao {
     public List<User> getAll() {
         List<User> userList = new ArrayList<>();
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(GET_ALL);
+             PreparedStatement statement = connection.prepareStatement(GET_ALL)) {
+            ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
                 User userFromDb = new User(

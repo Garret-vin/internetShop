@@ -3,6 +3,7 @@ package com.controller;
 import com.factory.UserServiceFactory;
 import com.model.User;
 import com.service.UserService;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -29,8 +30,6 @@ public class ChangeUserServlet extends HttpServlet {
             req.setAttribute("userId", id);
             req.setAttribute("enteredLogin", user.getLogin());
             req.setAttribute("enteredEmail", user.getEmail());
-            req.setAttribute("enteredPassword", user.getPassword());
-            req.setAttribute("enteredConfirm", user.getPassword());
             req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
         } else {
             logger.error("Error: Can't edit user. Reason: user not found!");
@@ -62,7 +61,8 @@ public class ChangeUserServlet extends HttpServlet {
             req.setAttribute("enteredEmail", email);
             req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
         } else {
-            User user = new User(id, login, email, password, role);
+            String encryptedPassword = DigestUtils.sha256Hex(password);
+            User user = new User(id, login, email, encryptedPassword, role);
             userService.update(user);
             resp.sendRedirect("/admin/users");
         }

@@ -9,7 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -71,8 +70,8 @@ public class ProductMySQLDaoImpl implements ProductDao {
     public List<Product> getAll() {
         List<Product> productList = new ArrayList<>();
         try (Connection connection = DBConnector.connect();
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(GET_ALL);
+             PreparedStatement statement = connection.prepareStatement(GET_ALL)) {
+            ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
                 Product product = new Product(

@@ -3,6 +3,7 @@ package com.controller;
 import com.factory.UserServiceFactory;
 import com.model.User;
 import com.service.UserService;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -47,7 +48,8 @@ public class AddUserServlet extends HttpServlet {
                     "электронной почтой уже зарегистрирован!");
             req.getRequestDispatcher("/addUser.jsp").forward(req, resp);
         } else if (password.equals(confirmPassword)) {
-            User user = new User(login, email, password, role);
+            String encryptedPassword = DigestUtils.sha256Hex(password);
+            User user = new User(login, email, encryptedPassword, role);
             userService.add(user);
             resp.sendRedirect("/admin/users");
         } else {
