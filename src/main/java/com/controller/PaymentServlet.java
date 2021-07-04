@@ -1,11 +1,14 @@
 package com.controller;
 
+import com.factory.BasketServiceFactory;
 import com.factory.CodeServiceFactory;
 import com.factory.MailServiceFactory;
 import com.factory.OrderServiceFactory;
+import com.model.Basket;
 import com.model.Code;
 import com.model.Order;
 import com.model.User;
+import com.service.BasketService;
 import com.service.CodeService;
 import com.service.MailService;
 import com.service.OrderService;
@@ -15,7 +18,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -25,6 +27,7 @@ public class PaymentServlet extends HttpServlet {
     private static final MailService mailService = MailServiceFactory.getInstance();
     private static final OrderService orderService = OrderServiceFactory.getInstance();
     private static final CodeService codeService = CodeServiceFactory.getInstance();
+    private static final BasketService basketService = BasketServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -37,9 +40,7 @@ public class PaymentServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        HttpSession session = req.getSession();
-
-        User user = (User) session.getAttribute("user");
+        User user = (User) req.getSession().getAttribute("user");
         String phoneNumber = req.getParameter("phone");
         String address = req.getParameter("address");
         String email = req.getParameter("email");
@@ -51,7 +52,13 @@ public class PaymentServlet extends HttpServlet {
             code = optionalCode.get();
         }
 
-        Order order = new Order(user, code, email, phoneNumber, address);
+        Basket basket = null;
+        Optional<Basket> optionalBasket = basketService.getBasketByUser(user);
+        if (optionalBasket.isPresent()) {
+            basket = optionalBasket.get();
+        }
+
+        Order order = new Order(basket, user, code, email, phoneNumber, address);
         orderService.add(order);
         new Thread(() -> mailService.sendConfirmCode(order)).start();
 

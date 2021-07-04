@@ -9,9 +9,9 @@ public interface ProductDao {
 
     void add(Product product);
 
-    void remove(Long id);
+    void remove(Product product);
 
-    void update(Product product);
+    void update(Long productId, Product product);
 
     List<Product> getAll();
 

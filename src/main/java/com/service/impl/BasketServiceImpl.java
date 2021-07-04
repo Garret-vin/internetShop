@@ -2,25 +2,34 @@ package com.service.impl;
 
 import com.dao.BasketDao;
 import com.factory.BasketDaoFactory;
+import com.model.Basket;
+import com.model.Product;
 import com.model.User;
 import com.service.BasketService;
+
+import java.util.Optional;
 
 public class BasketServiceImpl implements BasketService {
 
     private static final BasketDao basketDao = BasketDaoFactory.getInstance();
 
     @Override
-    public void addProduct(Long userId, Long productId) {
-        basketDao.addProduct(userId, productId);
+    public void add(Basket basket) {
+        basketDao.add(basket);
     }
 
     @Override
-    public int size(Long userId) {
-        return basketDao.size(userId);
+    public void addProduct(Basket basket, Product product) {
+        basketDao.addProduct(basket, product);
     }
 
     @Override
-    public void clean(User user) {
-        basketDao.clean(user);
+    public int size(Basket basket) {
+        return basketDao.size(basket);
+    }
+
+    @Override
+    public Optional<Basket> getBasketByUser(User user) {
+        return basketDao.getBasketByUser(user);
     }
 }

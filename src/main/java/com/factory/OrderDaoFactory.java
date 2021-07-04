@@ -1,7 +1,7 @@
 package com.factory;
 
 import com.dao.OrderDao;
-import com.dao.impl.OrderMySQLDaoImpl;
+import com.dao.impl.hibernate.OrderHibDaoImpl;
 
 public class OrderDaoFactory {
 
@@ -12,7 +12,7 @@ public class OrderDaoFactory {
 
     public static OrderDao getInstance() {
         if (instance == null) {
-            instance = new OrderMySQLDaoImpl();
+            instance = new OrderHibDaoImpl();
         }
         return instance;
     }

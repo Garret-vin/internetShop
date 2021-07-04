@@ -1,6 +1,9 @@
-package com.dao.impl;
+package com.dao.impl.mysql;
 
+import com.dao.BasketDao;
 import com.dao.OrderDao;
+import com.factory.BasketDaoFactory;
+import com.model.Basket;
 import com.model.Code;
 import com.model.Order;
 import com.model.User;
@@ -16,17 +19,18 @@ import java.util.Optional;
 public class OrderMySQLDaoImpl implements OrderDao {
 
     private static final Logger logger = Logger.getLogger(OrderMySQLDaoImpl.class);
+    private static final BasketDao basketDao = BasketDaoFactory.getInstance();
     private static final String ADD_ORDER = "INSERT INTO orders " +
-            "(user_id, code_id, email, phone_number, address) " +
-            "VALUES (?, ?, ?, ?, ?)";
+            "(basket_id, user_id, code_id, email, phone_number, address) " +
+            "VALUES (?, ?, ?, ?, ?, ?)";
 
-    private static final String GET_BY_ID = "SELECT orders.id, orders.user_id, code_id, orders.email, " +
-            "phone_number, address, login, password, role, value " +
+    private static final String GET_BY_ID = "SELECT orders.id, basket_id, orders.user_id, code_id, " +
+            "orders.email, phone_number, address, login, password, role, value " +
             "FROM orders INNER JOIN users ON orders.user_id = users.id " +
             "INNER JOIN code ON orders.code_id = code.id WHERE orders.id = ?";
 
-    private static final String GET_LAST_ORDER = "SELECT orders.id, orders.user_id, code_id, " +
-            "email, phone_number, address, value " +
+    private static final String GET_LAST_ORDER = "SELECT orders.id, basket_id, orders.user_id, " +
+            "code_id, email, phone_number, address, value " +
             "FROM orders INNER JOIN code ON orders.code_id = code.id " +
             "WHERE orders.user_id = ? ORDER BY orders.id DESC LIMIT 1";
 
@@ -34,11 +38,12 @@ public class OrderMySQLDaoImpl implements OrderDao {
     public void add(Order order) {
         try (Connection connection = DBConnector.connect();
              PreparedStatement statement = connection.prepareStatement(ADD_ORDER)) {
-            statement.setLong(1, order.getUser().getId());
-            statement.setLong(2, order.getCode().getId());
-            statement.setString(3, order.getEmail());
-            statement.setString(4, order.getPhoneNumber());
-            statement.setString(5, order.getAddress());
+            statement.setLong(1, order.getBasket().getId());
+            statement.setLong(2, order.getUser().getId());
+            statement.setLong(3, order.getCode().getId());
+            statement.setString(4, order.getEmail());
+            statement.setString(5, order.getPhoneNumber());
+            statement.setString(6, order.getAddress());
             statement.execute();
             logger.info(order + " was added to DB");
         } catch (SQLException e) {
@@ -60,12 +65,18 @@ public class OrderMySQLDaoImpl implements OrderDao {
                         resultSet.getString("email"),
                         resultSet.getString("password"),
                         resultSet.getString("role"));
+                Optional<Basket> optionalBasket = basketDao.getBasketByUser(user);
+                Basket basket = null;
+                if (optionalBasket.isPresent()) {
+                    basket = optionalBasket.get();
+                }
                 Code code = new Code(
                         resultSet.getLong("code_id"),
                         resultSet.getString("value"),
                         user);
                 Order order = new Order(
                         resultSet.getLong("id"),
+                        basket,
                         user,
                         code,
                         resultSet.getString("email"),
@@ -88,12 +99,18 @@ public class OrderMySQLDaoImpl implements OrderDao {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
+                Optional<Basket> optionalBasket = basketDao.getBasketByUser(user);
+                Basket basket = null;
+                if (optionalBasket.isPresent()) {
+                    basket = optionalBasket.get();
+                }
                 Code code = new Code(
                         resultSet.getLong("code_id"),
                         resultSet.getString("value"),
                         user);
                 Order order = new Order(
                         resultSet.getLong("id"),
+                        basket,
                         user,
                         code,
                         resultSet.getString("email"),

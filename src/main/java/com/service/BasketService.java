@@ -1,12 +1,18 @@
 package com.service;
 
+import com.model.Basket;
+import com.model.Product;
 import com.model.User;
+
+import java.util.Optional;
 
 public interface BasketService {
 
-    void addProduct(Long userId, Long productId);
+    void add(Basket basket);
 
-    int size(Long userId);
+    void addProduct(Basket basket, Product product);
 
-    void clean(User user);
+    int size(Basket basket);
+
+    Optional<Basket> getBasketByUser(User user);
 }

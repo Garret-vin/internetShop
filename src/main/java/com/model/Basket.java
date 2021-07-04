@@ -1,19 +1,54 @@
 package com.model;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "basket", schema = "onlineshop")
+@PrimaryKeyJoinColumn(name = "id")
 public class Basket {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
-    private Long userId;
-    private Long productId;
+
+    @OneToOne(targetEntity = User.class, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @JoinTable(name = "product_basket",
+            joinColumns = {@JoinColumn(name = "basket_id")},
+            inverseJoinColumns = {@JoinColumn(name = "product_id")})
+    private List<Product> productList;
 
     public Basket() {
     }
 
-    public Basket(Long userId, Long productId) {
-        this.userId = userId;
-        this.productId = productId;
+    public Basket(User user) {
+        this.user = user;
+        this.productList = new ArrayList<>();
+    }
+
+    public Basket(Long id, User user, List<Product> productList) {
+        this.id = id;
+        this.user = user;
+        this.productList = productList;
     }
 
     public Long getId() {
@@ -24,20 +59,20 @@ public class Basket {
         this.id = id;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Long getProductId() {
-        return productId;
+    public List<Product> getProductList() {
+        return productList;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
     }
 
     @Override
@@ -46,21 +81,20 @@ public class Basket {
         if (o == null || getClass() != o.getClass()) return false;
         Basket basket = (Basket) o;
         return Objects.equals(id, basket.id) &&
-                Objects.equals(userId, basket.userId) &&
-                Objects.equals(productId, basket.productId);
+                Objects.equals(user, basket.user) &&
+                Objects.equals(productList, basket.productList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, productId);
+        return Objects.hash(id, user, productList);
     }
 
     @Override
     public String toString() {
         return "Basket{" +
                 "id=" + id +
-                ", userId=" + userId +
-                ", productId=" + productId +
+                ", user=" + user +
                 '}';
     }
 }

@@ -6,9 +6,7 @@ import com.model.User;
 import com.service.UserService;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class UserServiceImpl implements UserService {
 
@@ -20,18 +18,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void remove(Long id) {
-        userDao.remove(id);
+    public void remove(User user) {
+        userDao.remove(user);
     }
 
     @Override
-    public void update(User user) {
-        userDao.update(user);
+    public Optional<User> getByLoginOrEmail(String login, String email) {
+        return userDao.getByLoginOrEmail(login, email);
     }
 
     @Override
-    public Map<String, String> getMapLoginToEmail() {
-        return userDao.getMapLoginToEmail();
+    public void update(Long userId, User user) {
+        userDao.update(userId, user);
     }
 
     @Override

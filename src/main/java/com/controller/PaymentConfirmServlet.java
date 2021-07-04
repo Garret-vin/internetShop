@@ -2,6 +2,7 @@ package com.controller;
 
 import com.factory.BasketServiceFactory;
 import com.factory.OrderServiceFactory;
+import com.model.Basket;
 import com.model.Order;
 import com.model.User;
 import com.service.BasketService;
@@ -33,12 +34,12 @@ public class PaymentConfirmServlet extends HttpServlet {
         String confirm = req.getParameter("confirm");
         User user = (User) req.getSession().getAttribute("user");
 
-        Order order = null;
         Optional<Order> optionalOrder = orderService.getLastOrderForUser(user);
         if (optionalOrder.isPresent()) {
-            order = optionalOrder.get();
+            Order order = optionalOrder.get();
             if (order.getCode().getValue().equals(confirm)) {
-                basketService.clean(user);
+                Basket basket = new Basket(order.getUser());
+                basketService.add(basket);
                 req.setAttribute("message", "Покупка успешно совершена!");
             } else {
                 req.setAttribute("message", "Неверный код. Введите заново!");

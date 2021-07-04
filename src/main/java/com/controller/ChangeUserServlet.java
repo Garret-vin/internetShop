@@ -62,8 +62,8 @@ public class ChangeUserServlet extends HttpServlet {
             req.getRequestDispatcher("/change_user.jsp").forward(req, resp);
         } else {
             String encryptedPassword = DigestUtils.sha256Hex(password);
-            User user = new User(id, login, email, encryptedPassword, role);
-            userService.update(user);
+            User user = new User(login, email, encryptedPassword, role);
+            userService.update(id, user);
             resp.sendRedirect("/admin/users");
         }
     }

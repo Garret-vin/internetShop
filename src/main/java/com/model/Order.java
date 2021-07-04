@@ -1,20 +1,53 @@
 package com.model;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 import java.util.Objects;
 
+@Entity
+@Table(name = "orders", schema = "onlineshop")
+@PrimaryKeyJoinColumn(name = "id")
 public class Order {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @OneToOne(targetEntity = Basket.class, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "basket_id")
+    private Basket basket;
+
+    @OneToOne(targetEntity = User.class, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToOne(targetEntity = Code.class, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "code_id")
     private Code code;
+
+    @Column(name = "email", length = 64, nullable = false)
     private String email;
+
+    @Column(name = "phone_number", length = 20, nullable = false)
     private String phoneNumber;
+
+    @Column(name = "address", length = 60, nullable = false)
     private String address;
 
     public Order() {
     }
 
-    public Order(User user, Code code, String email, String phoneNumber, String address) {
+    public Order(Basket basket, User user, Code code, String email, String phoneNumber, String address) {
+        this.basket = basket;
         this.user = user;
         this.code = code;
         this.email = email;
@@ -22,8 +55,9 @@ public class Order {
         this.address = address;
     }
 
-    public Order(Long id, User user, Code code, String email, String phoneNumber, String address) {
+    public Order(Long id, Basket basket, User user, Code code, String email, String phoneNumber, String address) {
         this.id = id;
+        this.basket = basket;
         this.user = user;
         this.code = code;
         this.email = email;
@@ -37,6 +71,14 @@ public class Order {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Basket getBasket() {
+        return basket;
+    }
+
+    public void setBasket(Basket basket) {
+        this.basket = basket;
     }
 
     public User getUser() {
@@ -85,6 +127,7 @@ public class Order {
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
         return Objects.equals(id, order.id) &&
+                Objects.equals(basket, order.basket) &&
                 Objects.equals(user, order.user) &&
                 Objects.equals(code, order.code) &&
                 Objects.equals(email, order.email) &&
@@ -94,13 +137,14 @@ public class Order {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, code, email, phoneNumber, address);
+        return Objects.hash(id, basket, user, code, email, phoneNumber, address);
     }
 
     @Override
     public String toString() {
         return "Order{" +
                 "id=" + id +
+                ", basket=" + basket +
                 ", user=" + user +
                 ", code=" + code +
                 ", email='" + email + '\'' +

@@ -8,7 +8,7 @@
 
 
 <p>Количество товара в корзине: ${size} <br>
-    <a href="/payment">Корзина</a>
+    <button><a href="/payment">Корзина</a></button>
 </p>
 
 <table border="1">

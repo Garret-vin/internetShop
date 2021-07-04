@@ -18,13 +18,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void remove(Long id) {
-        productDao.remove(id);
+    public void remove(Product product) {
+        productDao.remove(product);
     }
 
     @Override
-    public void update(Product product) {
-        productDao.update(product);
+    public void update(Long productId, Product product) {
+        productDao.update(productId, product);
     }
 
     @Override
